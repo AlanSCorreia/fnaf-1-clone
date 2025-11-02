@@ -1,13 +1,16 @@
 import pygame
-from escritorio import Escritorio
+from sistemas import filtrarEntidadesPorComponentes
+from entidades import Id, entidadesMask, componentesMask
 
 
 pygame.init()
-janela_width, janela_height = 1280, 720
-display_surface = pygame.display.set_mode((janela_width, janela_height), pygame.FULLSCREEN)
+janelaLargura, janelaAltura = 1280, 720
+displaySurface = pygame.display.set_mode((janelaLargura, janelaAltura), pygame.FULLSCREEN)
 
 pygame.display.set_caption("FNAF 1 Clone")
 clock = pygame.time.Clock()
 
-escritorio_group = pygame.sprite.GroupSingle()
-escritorio = Escritorio(escritorio_group)
+surfacesAndRectanglesIds = filtrarEntidadesPorComponentes(Id,
+														  ["surface", "rectangle"],
+														  entidadesMask,
+														  componentesMask)
