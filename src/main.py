@@ -1,15 +1,13 @@
 import sys
 
 import pygame
-from configuracoes import displaySurface, clock, surfacesAndRectanglesIds
+import configuracoes
 
 import assets
 import entidades
 import componentes
-from sistemas import podeClickar, atualizarEstadoDosBotoes, atualizarEstadoDasPortas,\
-					 atualizarFrameDoVentilador, atualizarFramesDasPortas,\
-					 desenharSurfaces, atualizarImageDoPainelDeBotoes,\
-					 atualizarPosicoes, atualizarIntervaloDeClick, impossibilitarClick
+import sistemas
+
 
 while True:
 	for event in pygame.event.get():
@@ -21,55 +19,80 @@ while True:
 				pygame.quit()
 				sys.exit()
 		if event.type == pygame.MOUSEBUTTONDOWN:
-			if pygame.mouse.get_pressed()[0] and podeClickar:
-				print(pygame.mouse.get_pos())
+			if pygame.mouse.get_pressed()[0] and sistemas.podeClickar:
+				# print(pygame.mouse.get_pos())
 
-				if atualizarEstadoDosBotoes((entidades.Id.BotaoDaPortaEsquerda,
-								 			 entidades.Id.BotaoDaPortaDireita),
-											 componentes.rectangles,
-											 componentes.botoesDaPorta,
-											 "O botão da porta foi apertado!")\
-				or atualizarEstadoDosBotoes((entidades.Id.BotaoDaLuzEsquerda,
-								 			 entidades.Id.BotaoDaLuzDireita),
-											 componentes.rectangles,
-											 componentes.botoesDaLuz,
-											 "O botão da luz foi apertado!"):
-					atualizarImageDoPainelDeBotoes(
-						((entidades.Id.PainelDeBotoesEsquerdo, entidades.Id.BotaoDaPortaEsquerda, entidades.Id.BotaoDaLuzEsquerda),
-						(entidades.Id.PainelDeBotoesDireito, entidades.Id.BotaoDaPortaDireita, entidades.Id.BotaoDaLuzDireita)),
-						componentes.surfaces,
-						componentes.botoesDaPorta,
-						componentes.botoesDaLuz,
-						assets.assets)
-					atualizarEstadoDasPortas((entidades.Id.PortaEsquerda,
-											  entidades.Id.PortaDireita),
-											 (entidades.Id.BotaoDaPortaEsquerda,
-											  entidades.Id.BotaoDaPortaDireita),
-											  componentes.portas,
-											  componentes.botoesDaPorta)
+				if sistemas.atualizarEstadoDosBotoes((entidades.Id.BotaoDaPortaEsquerda,
+										  			  entidades.Id.BotaoDaPortaDireita,
+													  entidades.Id.BotaoDaLuzEsquerda,
+													  entidades.Id.BotaoDaLuzDireita),
+													  componentes.rectangles,
+													  componentes.botoesDasPortas,
+													  componentes.botoesDasLuzes,
+													  entidades.entidadesMask,
+													  entidades.componentesMask,
+													  "O botão da porta foi apertado!"):
+					sistemas.atualizarSurfaceDoPainelDeBotoes(((entidades.Id.PainelDeBotoesEsquerdo,
+											   				  entidades.Id.BotaoDaPortaEsquerda,
+															  entidades.Id.BotaoDaLuzEsquerda),
+															 (entidades.Id.PainelDeBotoesDireito,
+				 											  entidades.Id.BotaoDaPortaDireita,
+															  entidades.Id.BotaoDaLuzDireita)),
+															 componentes.surfaces,
+															 componentes.botoesDasPortas,
+															 componentes.botoesDasLuzes,
+															 assets.assets)
+					sistemas.atualizarSurfaceDoEscritorio(entidades.Id.Escritorio,
+										   				  (entidades.Id.BotaoDaLuzEsquerda,
+														   entidades.Id.BotaoDaLuzDireita),
+														  componentes.botoesDasLuzes,
+														  componentes.surfaces,
+														  assets.assets)
+					sistemas.atualizarEstadoDasPortas((entidades.Id.PortaEsquerda,
+													   entidades.Id.PortaDireita),
+													  (entidades.Id.BotaoDaPortaEsquerda,
+													   entidades.Id.BotaoDaPortaDireita),
+													   componentes.portas,
+													   componentes.botoesDasPortas)
 
-				impossibilitarClick()
+				sistemas.impossibilitarClick()
 		
-	delta_time = clock.tick(60)/1000
+	delta_time = configuracoes.clock.tick(60)/1000
 
+	sistemas.atualizarDisponibilidadeDosBotoes((entidades.Id.BotaoDaPortaEsquerda,
+											 	entidades.Id.BotaoDaLuzEsquerda,
+											 	entidades.Id.BotaoDaPortaDireita,
+												entidades.Id.BotaoDaLuzDireita),
+												componentes.botoesDasPortas,
+												componentes.botoesDasLuzes,
+												entidades.entidadesMask,
+												entidades.componentesMask)
+
+	sistemas.atualizarFramesDoVentilador(entidades.Id.Ventilador,
+									    componentes.frames,
+										componentes.surfaces,
+										assets.assets)
+	sistemas.atualizarFramesDasPortas((entidades.Id.PortaEsquerda,
+									   entidades.Id.PortaDireita),
+									   componentes.surfaces,
+									   componentes.portas,
+									   componentes.frames,
+									   assets.assets)
 	
-	atualizarFrameDoVentilador(entidades.Id.Ventilador,
-							   componentes.frames,
-							   componentes.surfaces,
-							   assets.assets)
-	atualizarFramesDasPortas((entidades.Id.PortaEsquerda,
-							  entidades.Id.PortaDireita),
+	sistemas.atualizarPosicoes(entidades.Id,
+							   componentes.rectangles)
+	sistemas.desenharSurfaces(configuracoes.displaySurface,
+						      configuracoes.surfacesAndRectanglesIds,
 							  componentes.surfaces,
-							  componentes.portas,
-							  componentes.frames,
-							  assets.assets)
-
-	atualizarPosicoes(entidades.Id,
-				   	  componentes.rectangles)
-	desenharSurfaces(displaySurface,
-					 surfacesAndRectanglesIds,
-					 componentes.surfaces,
-					 componentes.rectangles)
-	atualizarIntervaloDeClick()
+							  componentes.rectangles)
+	sistemas.debug(configuracoes.fonte,
+				   configuracoes.displaySurface,
+				   entidades.Id,
+				   componentes.rectangles,
+				   componentes.botoesDasPortas,
+				   componentes.botoesDasLuzes,
+				   componentes.portas)
+	
+	sistemas.atualizarIntervaloDeClick()
 
 	pygame.display.update()

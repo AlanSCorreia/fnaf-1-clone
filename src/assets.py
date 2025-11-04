@@ -4,11 +4,38 @@ import entidades
 assets = {
 	entidades.Id.Escritorio: {
 		"vazio": {
-			0: pygame.image.load("assets\\3-THE_OFFICE\\1-OFFICE.png").convert_alpha()
+			0: pygame.image.load("assets\\3-THE_OFFICE\\1-OFFICE.png").convert_alpha(),
+			1: pygame.image.load("assets\\3-THE_OFFICE\\LEFT_LIGHT.png").convert_alpha(),
+			2: pygame.image.load("assets\\3-THE_OFFICE\\RIGHT_LIGHT.png").convert_alpha()
 		},
-		"nao_vazio": {
-			
-		}
+		"com_animatronicos": {
+			0: pygame.image.load("assets\\3-THE_OFFICE\\1-OFFICE_BONNIE.png").convert_alpha(),
+			1: pygame.image.load("assets\\3-THE_OFFICE\\1-OFFICE_CHICA.png").convert_alpha()
+		},
+		"jumpscares": {
+			"bonnie": {
+				frame-1: pygame.image.load(f"assets\\3-THE_OFFICE\\JUMPSCARES\\2-BONNIE\\{frame}.png").convert_alpha()
+				for frame in range(1, 12)
+			},
+			"chica" : {
+				frame-1: pygame.image.load(f"assets\\3-THE_OFFICE\\JUMPSCARES\\3-CHICA\\{frame}.png").convert_alpha()
+				for frame in range(1, 17)
+			},
+			"freddy": {
+				frame-1 : pygame.image.load(f"assets\\3-THE_OFFICE\\JUMPSCARES\\1-FREDDY\\{frame}.png").convert_alpha()
+				for frame in range(1, 30)
+			},
+			"freddy_sem_energia": {
+				frame-1 : pygame.image.load(f"assets\\3-THE_OFFICE\\JUMPSCARES\\1-FREDDY\\{frame}.png").convert_alpha()
+				for frame in range(1, 21)
+			},
+			"foxy"  : {
+				frame-1 : pygame.image.load(f"assets\\3-THE_OFFICE\\FOXY\\{frame}.png").convert_alpha()
+				for frame in range(1, 21)
+			}
+		},
+		"sem_energia": pygame.image.load("assets\\3-THE_OFFICE\\LIGHTS_OUT\\304.png").convert_alpha(),
+		"freddy_jingle": pygame.image.load("assets\\3-THE_OFFICE\\LIGHTS_OUT\\305.png").convert_alpha()
 	},
 
 	entidades.Id.Ventilador: {
