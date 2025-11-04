@@ -5,12 +5,13 @@ import assets
 
 
 class Botao:
-	def __init__(self) -> None:
+	def __init__(self,
+			  	 intervaloDeDisponibilidade: int) -> None:
 
 		self.estado = False
 		self.estaDisponivel = True
 		self.ultimoTempoDisponivel = 0
-		self.intervaloDeDisponibilidade = 0.15
+		self.intervaloDeDisponibilidade = intervaloDeDisponibilidade
 
 
 class Porta:
@@ -51,7 +52,8 @@ surfaces = {
 	entidades.Id.PainelDeBotoesEsquerdo: assets.assets[entidades.Id.PainelDeBotoesEsquerdo][0],
 	entidades.Id.PortaDireita		   : assets.assets[entidades.Id.PortaDireita		  ][0],
 	entidades.Id.PainelDeBotoesDireito : assets.assets[entidades.Id.PainelDeBotoesDireito ][0],
-} 
+}
+
 rectangles = {
 	entidades.Id.Escritorio			   : assets.assets[entidades.Id.Escritorio			  ]["vazio"][0].get_rect(topleft=(0, 0)),
 	entidades.Id.Ventilador			   : assets.assets[entidades.Id.Ventilador			  ][0].get_rect(topleft=(783, 303)),
@@ -65,15 +67,19 @@ rectangles = {
 	entidades.Id.BotaoDaLuzDireita	   : pygame.Rect((1488, 447), (40, 55)),
 }
 
-botoesDaPorta = {
-	entidades.Id.BotaoDaPortaEsquerda: Botao(),
-	entidades.Id.BotaoDaPortaDireita : Botao()
+botoesDasPortas = {
+	entidades.Id.BotaoDaPortaEsquerda: Botao(500),
+	entidades.Id.BotaoDaPortaDireita : Botao(500)
 }
 
-botoesDaLuz = {
-	entidades.Id.BotaoDaLuzEsquerda: Botao(),
-	entidades.Id.BotaoDaLuzDireita : Botao()
+botoesDasLuzes = {
+	entidades.Id.BotaoDaLuzEsquerda: Botao(250),
+	entidades.Id.BotaoDaLuzDireita : Botao(250)
 }
+
+# botoesDaCamera = {
+
+# }
 
 portas = {
 	entidades.Id.PortaEsquerda: Porta(),
@@ -81,15 +87,18 @@ portas = {
 }
 
 frames = {
-	entidades.Id.Ventilador   : Frames(0, 0, 0.3),
-	entidades.Id.PortaEsquerda: Frames(0, 0, 0.2),
-	entidades.Id.PortaDireita : Frames(0, 0, 0.2)
+	entidades.Id.Ventilador   : Frames(0, 0, 25),
+	entidades.Id.PortaEsquerda: Frames(0, 0, 25),
+	entidades.Id.PortaDireita : Frames(0, 0, 25)
 }
 
 # animatronicos = {
-# 	EntidadesI.]:nimatronico(0, 0, {}),
-# 	EntidadesI.]:nimatronico(0, 0, {}),
-# 	EntidadesI.]:nimatronico(0, 0, {}),
-# 	EntidadesI.]:nimatronico(0, 0, {})
+# 	entidades.Id.Freddy: Animatronico(0, 3.02, {}),
+# 	entidades.Id.Bonnie: Animatronico(0, 4.97, {}),
+# 	entidades.Id.Chica : Animatronico(0, 4.98, {}),
+# 	entidades.Id.Foxy  : Animatronico(0, 5.02, {})
 # }
-	
+
+localizacaoDosAnimatronicos = {
+	"CAM A1": [],
+}

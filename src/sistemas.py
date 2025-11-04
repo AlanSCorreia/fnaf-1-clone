@@ -57,7 +57,7 @@ def atualizarPosicoes(entidadesId,
 			rectangles[entidadeId].x += atualizarPosicao
 
 
-def atualizarImageDoPainelDeBotoes(mapsId,
+def atualizarSurfaceDoPainelDeBotoes(mapsId,
 								   surfaces,
 								   botoesDaPorta,
 								   botoesDaLuz,
@@ -85,18 +85,50 @@ def oportunidadeDeMovimento(animatronico) -> bool:
 
 def atualizarEstadoDosBotoes(entidadesId,
 							 rectangles,
-							 botoes,
+							 botoesDasPortas,
+							 botoesDasLuzes,
+							 entidadesMask,
+							 componentesMask,
 							 mensagem_debug: str) -> bool:
-
+	
+	# Ideia de otimização: Fazer checagens com base na posição do mouse
+	# por exemplo, não tem porque considerar os botões das luzes se a posição Y
+	# estiver abaixo da posição em que esses botões se encontram (não esqueça, quanto
+	# mais baixo na tela, maior o valor de Y)
 	teveColisao = False
 
 	for entidadeId in entidadesId:
-		if rectangles[entidadeId].collidepoint(pygame.mouse.get_pos()):
-			botoes[entidadeId].estado = not botoes[entidadeId].estado
+		botao = botoesDasPortas if possuiComponente(entidadesMask[entidadeId], componentesMask["botaoDaPorta"])\
+								else botoesDasLuzes
+		
+		if rectangles[entidadeId].collidepoint(pygame.mouse.get_pos()) and botao[entidadeId].estaDisponivel:
+			botao[entidadeId].estado = not botao[entidadeId].estado
 			teveColisao = True
+
+			botao[entidadeId].ultimoTempoDisponivel = pygame.time.get_ticks()
+			botao[entidadeId].estaDisponivel = False
 			print(mensagem_debug)
 
 	return teveColisao
+
+
+def atualizarDisponibilidadeDosBotoes(botoesId,
+									  botoesDasPortas,
+									  botoesDasLuzes,
+									  entidadesMask,
+									  componentesMask):
+	
+	# Ideia de otimização: Fazer checagens com base na posição do mouse
+	# por exemplo, não tem porque considerar os botões das luzes se a posição Y
+	# estiver abaixo da posição em que esses botões se encontram (não esqueça, quanto
+	# mais baixo na tela, maior o valor de Y)
+	for botaoId in botoesId:
+		botao = botoesDasPortas if possuiComponente(entidadesMask[botaoId], componentesMask["botaoDaPorta"])\
+							  else botoesDasLuzes
+		
+		if not botao[botaoId].estaDisponivel:
+			if pygame.time.get_ticks() - botao[botaoId].ultimoTempoDisponivel > botao[botaoId].intervaloDeDisponibilidade:
+				botao[botaoId].estaDisponivel = True
 
 
 def atualizarEstadoDasPortas(portasId,
@@ -104,29 +136,68 @@ def atualizarEstadoDasPortas(portasId,
 							 portas,
 							 botoes) -> None:
 	
-	# TODO: Validar a disponibilidade do botão antes de aperta-ló
-	# e atualiza-lá após aperta-ló
+	# Ideia de otimização: Fazer checagens com base na posição do mouse
+	# por exemplo, não tem porque considerar a porta direita se a posição x
+	# estiver abaixo da posição em que esta porta se encontra
 
 	for portaId, botaoId in zip(portasId, botoesId):
 		if portas[portaId].aberta:
-			if botoes[botaoId].estado: #and botoes[botaoId].estaDisponivel:
+			if botoes[botaoId].estado:
 				portas[portaId].aberta 	 = False
 				portas[portaId].fechando = True
-				# botoes[botaoId].estaDisponivel = False
+
+				botoes[botaoId].estaDisponivel = False
 				print(f"Fechando porta -> {portaId}")
 		elif portas[portaId].fechada:
 			if not botoes[botaoId].estado:
 				portas[portaId].fechada = False
 				portas[portaId].abrindo = True
+
+				botoes[botaoId].estaDisponivel = False
 				print(f"Abrindo porta -> {portaId}")
 		
-		print(f"Estado da porta {portaId}:\nFechada: {portas[portaId].fechada}\nFechando: {portas[portaId].fechando}\nAberta: {portas[portaId].aberta}\nAbrindo: {portas[portaId].abrindo}")
+		# print(f"Estado da porta {portaId}:\nFechada: {portas[portaId].fechada}\nFechando: {portas[portaId].fechando}\nAberta: {portas[portaId].aberta}\nAbrindo: {portas[portaId].abrindo}")
+
+
+def atualizarSurfaceDoEscritorio(entidadeId,
+								 botoesId,
+								 botoesDasLuzes,
+								 surfaces,
+								 assets) -> None:
+	
+	# Usei numero mágico pra não ter que importar o displaySurface so pra pegar metade da tela 
+	botaoId, vazioId = (botoesId[0], 1) if pygame.mouse.get_pos()[0] < 500\
+					    else (botoesId[1], 2)
+	
+	if botoesDasLuzes[botaoId].estado:
+		surfaces[entidadeId] = assets[entidadeId]["vazio"][vazioId]
+	# Checar se a Bonnie e/ou chica estão na porta
+	else:
+		surfaces[entidadeId] = assets[entidadeId]["vazio"][0]
+
+
+def atualizarFrames():
+
+	# TOOD: Fazer uma função atualizarFrame() para:
+	# 	incrementar,
+	# 	decrementar,
+	# 	manter uma animação em loop
+	pass
+
+
+def atualizarFramesDosJumpscares():
+
+	pass
+
 
 def atualizarFramesDasPortas(entidadesId,
 							 surfaces,
 							 portas,
 							 frames,
 							 assets) -> None:
+	
+	# Ideia de otimização: Criar função que faz o processo de mudar as váriaveis referentes
+	# aos 4 estados das portas
 	
 	for entidadeId in entidadesId:
 		animacaoOcorrendo = 0
@@ -157,16 +228,11 @@ def atualizarFramesDasPortas(entidadesId,
 					portas[entidadeId].aberta	  = True
 
 
-def atualizarFrameDoVentilador(entidadeId,
-							   frames,
-							   surfaces,
-							   assets) -> None:
+def atualizarFramesDoVentilador(entidadeId,
+							    frames,
+							    surfaces,
+							    assets) -> None:
 
-
-	# TOOD: Fazer uma função atualizarFrame() para:
-	# 	incrementar,
-	# 	decrementar,
-	# 	manter uma animação em loop
 	if pygame.time.get_ticks() - frames[entidadeId].tempoDoUltimoFrame > frames[entidadeId].intervaloEntreFrames:	
 		frames[entidadeId].frameAtual = (frames[entidadeId].frameAtual + 1) if frames[entidadeId].frameAtual < len(assets[entidadeId])-1\
 										 else 0
@@ -179,7 +245,7 @@ def possuiComponente(entidadeMask,
     return (entidadeMask & componente) != 0
 
 
-def filtrarEntidadesPorComponentes(entidadesId: list,
+def filtrarEntidadesPorComponentes(entidadesId,
 								   componentes: list[str],
 								   entidadeMask: dict,
 								   componenteMask: dict):
@@ -194,8 +260,32 @@ def filtrarEntidadesPorComponentes(entidadesId: list,
 									  componenteMask)]
 
 
-def debug(entidadesId,
-		  entidadesMask,
+def debug(fonte: pygame.font.Font,
+		  displaySurface,
+		  entidadesId,
+		  rectangles,
+		#   entidadesMask,
 		  botoesDasPortas,
-		  botoesDasLuzes,) -> None:
-	pass
+		  botoesDasLuzes,
+		  portas
+		  ):
+
+	texto = ''
+
+	texto += f"{entidadesId.Escritorio}\n"
+	texto += f"Eixo X: {rectangles[entidadesId.Escritorio].x} Eixo Y: {rectangles[entidadesId.Escritorio].y}\n"
+	texto += f"\n{entidadesId.PainelDeBotoesEsquerdo}\n"
+	texto += f"Eixo X : {rectangles[entidadesId.PainelDeBotoesEsquerdo].x} Eixo Y: {rectangles[entidadesId.PainelDeBotoesEsquerdo].y}\n"
+	texto += f"fechada: {portas[entidadesId.PortaEsquerda].fechada} fechando: {portas[entidadesId.PortaEsquerda].fechando} aberta: {portas[entidadesId.PortaEsquerda].aberta} abrindo: {portas[entidadesId.PortaEsquerda].abrindo}\n"
+	texto += f"Botão da Porta: {botoesDasPortas[entidadesId.BotaoDaPortaEsquerda].estado} esta disponível: {botoesDasPortas[entidadesId.BotaoDaPortaEsquerda].estaDisponivel}\n"
+	texto += f"Botão da Luz: {botoesDasLuzes[entidadesId.BotaoDaLuzEsquerda].estado} esta disponível: {botoesDasLuzes[entidadesId.BotaoDaLuzEsquerda].estaDisponivel}\n"
+	texto += f"\n{entidadesId.PainelDeBotoesDireito}\n"
+	texto += f"Eixo X: {rectangles[entidadesId.PainelDeBotoesDireito].x} Eixo Y: {rectangles[entidadesId.PainelDeBotoesDireito].y}\n"
+	texto += f"fechada: {portas[entidadesId.PortaDireita].fechada} fechando: {portas[entidadesId.PortaDireita].fechando} aberta: {portas[entidadesId.PortaDireita].aberta} abrindo: {portas[entidadesId.PortaDireita].abrindo}\n"
+	texto += f"Botão da Porta: {botoesDasPortas[entidadesId.BotaoDaPortaDireita].estado} esta disponível: {botoesDasPortas[entidadesId.BotaoDaPortaDireita].estaDisponivel}\n"
+	texto += f"Botão da Luz: {botoesDasLuzes[entidadesId.BotaoDaLuzDireita].estado} esta disponível: {botoesDasLuzes[entidadesId.BotaoDaLuzDireita].estaDisponivel}\n"
+
+	fonteSurface = fonte.render(texto, True, pygame.color.Color("white"))
+	fonteRect = fonteSurface.get_rect(topleft=(0, 0))
+
+	displaySurface.blit(fonteSurface, fonteRect)

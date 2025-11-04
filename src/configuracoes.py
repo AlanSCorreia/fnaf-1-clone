@@ -8,6 +8,7 @@ janelaLargura, janelaAltura = 1280, 720
 displaySurface = pygame.display.set_mode((janelaLargura, janelaAltura), pygame.FULLSCREEN)
 
 pygame.display.set_caption("FNAF 1 Clone")
+fonte = pygame.font.Font()
 clock = pygame.time.Clock()
 
 surfacesAndRectanglesIds = filtrarEntidadesPorComponentes(Id,
