@@ -1,3 +1,12 @@
+# Todo:
+#	3 - existem momento diferentes onde diferentes botões serão necessários ao decorrer do game.
+# 		O menu inicial tem seus botões,
+# 		o menu de custom night tem seus botões,
+#		durante o gameplay no escritório
+# 		e quando a câmera está sendo utilizada,
+# 		cada situação tem suas entidades, componentes e sistemas. Preciso pensar como organizar tudo isto
+# Propostas:
+
 import sys
 
 import pygame
@@ -14,85 +23,189 @@ while True:
 		if event.type == pygame.QUIT:
 			pygame.quit()
 			sys.exit()
+		
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_ESCAPE:
 				pygame.quit()
 				sys.exit()
+				
+		if event.type == pygame.MOUSEMOTION:
+			sistemas.ativarCamera(entidades.Entidades.CAMERA,
+						 		  event,
+								  configuracoes.uiEstatico.botaoCameraRectangle,
+								  componentes.estados,
+								  componentes.quadros)
+			
 		if event.type == pygame.MOUSEBUTTONDOWN:
-			if pygame.mouse.get_pressed()[0] and sistemas.podeClickar:
+			if event.button == 1 and componentes.globais["estadoMouse"]["estaDisponivel"]:
 				# print(pygame.mouse.get_pos())
+				match componentes.globais["momentoEmJogo"]["atual"]:
+					case componentes.MomentosEmJogo.SEM_CAMERA:
+						painelDeBotoesId = None
+						portaId = None
+						escritorioSurfaceId = 0
+						
+						if event.pos[0] < configuracoes.janelaLargura/2:
+							painelDeBotoesId = entidades.painelDeBotoesEsquerdo
+							portaId = entidades.Entidades.PORTA_ESQUERDA
+							escritorioSurfaceId = 1
+						else:
+							painelDeBotoesId = entidades.painelDeBotoesDireito
+							portaId = entidades.Entidades.PORTA_DIREITA
+							escritorioSurfaceId = 2
 
-				if sistemas.atualizarEstadoDosBotoes((entidades.Id.BotaoDaPortaEsquerda,
-										  			  entidades.Id.BotaoDaPortaDireita,
-													  entidades.Id.BotaoDaLuzEsquerda,
-													  entidades.Id.BotaoDaLuzDireita),
-													  componentes.rectangles,
-													  componentes.botoesDasPortas,
-													  componentes.botoesDasLuzes,
-													  entidades.entidadesMask,
-													  entidades.componentesMask,
-													  "O botão da porta foi apertado!"):
-					sistemas.atualizarSurfaceDoPainelDeBotoes(((entidades.Id.PainelDeBotoesEsquerdo,
-											   				  entidades.Id.BotaoDaPortaEsquerda,
-															  entidades.Id.BotaoDaLuzEsquerda),
-															 (entidades.Id.PainelDeBotoesDireito,
-				 											  entidades.Id.BotaoDaPortaDireita,
-															  entidades.Id.BotaoDaLuzDireita)),
-															 componentes.surfaces,
-															 componentes.botoesDasPortas,
-															 componentes.botoesDasLuzes,
-															 assets.assets)
-					sistemas.atualizarSurfaceDoEscritorio(entidades.Id.Escritorio,
-										   				  (entidades.Id.BotaoDaLuzEsquerda,
-														   entidades.Id.BotaoDaLuzDireita),
-														  componentes.botoesDasLuzes,
-														  componentes.surfaces,
-														  assets.assets)
-					sistemas.atualizarEstadoDasPortas((entidades.Id.PortaEsquerda,
-													   entidades.Id.PortaDireita),
-													  (entidades.Id.BotaoDaPortaEsquerda,
-													   entidades.Id.BotaoDaPortaDireita),
-													   componentes.portas,
-													   componentes.botoesDasPortas)
+						# O primeiro item de cada Painel de Controle é o próprio Painel
+						# Os dois seguintes são os botões do Painel
+						for salaId in painelDeBotoesId[1:]:
+							if sistemas.atualizarEstadoDoBotao(salaId,
+															componentes.rectangles["inanimados"],
+															componentes.estados):
+								
+								sistemas.atualizarSurfaceDoPainelDeBotoes(painelDeBotoesId,
+																		componentes.surfaces["inanimados"],
+																		componentes.estados,
+																		assets.inanimados)
+								
+								sistemas.atualizarSurfaceDoEscritorio(entidades.Entidades.OFFICE,
+																		painelDeBotoesId[2],
+																		escritorioSurfaceId,
+																		componentes.estados,
+																		componentes.surfaces["backgrounds"],
+																		assets.backgrounds)
+								
+								sistemas.atualizarEstadoDaPorta(portaId,
+															painelDeBotoesId[1],
+															componentes.estados,
+															componentes.quadros)
 
-				sistemas.impossibilitarClick()
+					case componentes.MomentosEmJogo.COM_CAMERA:
+						for salaId in entidades.botoesSalas:
+							if sistemas.atualizarEstadoDoBotao(salaId,
+										  					   componentes.rectangles["botoesSalas"],
+															   componentes.estados):
+								componentes.quadros[entidades.Entidades.CAMERA_TRANSICAO].animacaoEstaOcorrendo = True
+								
+								sistemas.atualizarBackgroundCamera(salaId,
+										   						   componentes.globais["cameraBackground"])
+								
+				componentes.globais["estadoMouse"]["ultimoClick"] = pygame.time.get_ticks()
+				componentes.globais["estadoMouse"]["estaDisponivel"] = False
+
+	deltaTime = configuracoes.clock.tick(120)/1000
+	tempoAtual = pygame.time.get_ticks()
+	atualizarPosicaoSemCamera = int(500*deltaTime)
+	atualizarPosicaoComCamera = int(150*deltaTime)
+	
+	sistemas.atualizarDirecaoCamera(entidades.Entidades.CAMERA_MOVIMENTO,
+								 	componentes.estados,
+								 	componentes.globais["deslocamentoComCamera"],
+								 	componentes.globais["limitesDeslocamentoCamera"])
+	
+	sistemas.atualizarMomentoEmJogo(entidades.Entidades.CAMERA,
+									componentes.globais["momentoEmJogo"],
+									componentes.MomentosEmJogo,
+									componentes.estados)
+
+	for estadoId in entidades.estados:
+		sistemas.disponibilizarEstado(estadoId,
+									  componentes.estados)
+
+	for salaId in entidades.quadros:
+		if componentes.quadros[salaId].animacaoEstaOcorrendo:
+
+			if sistemas.checarIntervaloEntreQuadros(salaId,
+													componentes.quadros,
+													tempoAtual):
+				
+				if componentes.quadros[salaId].estaRevertendo:
+					sistemas.decrementarQuadro(salaId,
+												componentes.quadros,
+												assets.animados)
+				else:
+					sistemas.acrescentarQuadro(salaId,
+												componentes.quadros,
+												assets.animados)
+
+				surfaces = None
+
+				if salaId in entidades.estaticosSurfaces:
+					surfaces = componentes.surfaces["estaticos"]
+				else:
+					surfaces = componentes.surfaces["animados"]
+
+				sistemas.atualizarQuadro(salaId,
+										 surfaces,
+										 componentes.quadros,
+										 assets.animados,
+										 tempoAtual)
+				
+				sistemas.atualizarEstadoDaAnimacao(salaId,
+												   componentes.quadros,
+												   assets.animados)
+
+	match componentes.globais["momentoEmJogo"]["atual"]:
+		case componentes.MomentosEmJogo.SEM_CAMERA:
+			sistemas.atualizarPosicaoDinamica(atualizarPosicaoSemCamera,
+									 		  componentes.globais["limitesDeslocamentoCamera"],
+											  componentes.globais["deslocamentoSemCamera"])
+			
+			deslocamentoVertical = componentes.globais["deslocamentoSemCamera"]["vertical"]
+
+			for salaId in entidades.inanimadosRectangles:
+				componentes.rectangles["inanimados"][salaId].x += deslocamentoVertical
+			
+			for salaId in entidades.animadosRectangles:
+				componentes.rectangles["animados"][salaId].x += deslocamentoVertical
+			
+			componentes.rectangles["backgrounds"][entidades.Entidades.OFFICE].x += deslocamentoVertical
+			
+			configuracoes.displaySurface.blit(componentes.surfaces["backgrounds"][entidades.Entidades.OFFICE],
+											  componentes.rectangles["backgrounds"][entidades.Entidades.OFFICE])
+
+			for salaId in entidades.animadosSurfaces:
+				configuracoes.displaySurface.blit(componentes.surfaces["animados"][salaId],
+												  componentes.rectangles["animados"][salaId])
+
+			for salaId in entidades.inanimadosSurfaces:
+				configuracoes.displaySurface.blit(componentes.surfaces["inanimados"][salaId],
+												componentes.rectangles["inanimados"][salaId])
 		
-	delta_time = configuracoes.clock.tick(60)/1000
+		case componentes.MomentosEmJogo.COM_CAMERA:
+			sistemas.atualizarPosicaoBackgroundCamera(entidades.Entidades.CAMERA_MOVIMENTO,
+											 		  componentes.estados,
+													  atualizarPosicaoComCamera,
+											 		  componentes.globais["deslocamentoComCamera"])
+			
+			if componentes.estados[entidades.Entidades.CAMERA_MOVIMENTO].estaDisponivel:
+				componentes.rectangles["backgrounds"][componentes.globais["cameraBackground"]["atual"]].x += componentes.globais["deslocamentoComCamera"]["vertical"]
 
-	sistemas.atualizarDisponibilidadeDosBotoes((entidades.Id.BotaoDaPortaEsquerda,
-											 	entidades.Id.BotaoDaLuzEsquerda,
-											 	entidades.Id.BotaoDaPortaDireita,
-												entidades.Id.BotaoDaLuzDireita),
-												componentes.botoesDasPortas,
-												componentes.botoesDasLuzes,
-												entidades.entidadesMask,
-												entidades.componentesMask)
+			# Draw Background
+			configuracoes.displaySurface.blit(componentes.surfaces["backgrounds"][componentes.globais["cameraBackground"]["atual"]],
+											  componentes.rectangles["backgrounds"][componentes.globais["cameraBackground"]["atual"]])
+			
+			for salaId in entidades.camera:
+				configuracoes.displaySurface.blit(componentes.surfaces["botoesSalas"][salaId],
+									  			  componentes.rectangles["botoesSalas"][salaId])
+			
+			configuracoes.uiEstaticoComCamera.desenhar()
 
-	sistemas.atualizarFramesDoVentilador(entidades.Id.Ventilador,
-									    componentes.frames,
-										componentes.surfaces,
-										assets.assets)
-	sistemas.atualizarFramesDasPortas((entidades.Id.PortaEsquerda,
-									   entidades.Id.PortaDireita),
-									   componentes.surfaces,
-									   componentes.portas,
-									   componentes.frames,
-									   assets.assets)
+	for salaId in entidades.estaticosSurfaces:
+		if sistemas.possuiComponente(entidades.entidadesMasks[salaId],
+							   		 entidades.Bitmasks.QUADRO_APENAS):
+			if componentes.quadros[salaId].animacaoEstaOcorrendo:
+				configuracoes.displaySurface.blit(componentes.surfaces["estaticos"][salaId],
+												  componentes.rectangles["estaticos"][salaId])
 	
-	sistemas.atualizarPosicoes(entidades.Id,
-							   componentes.rectangles)
-	sistemas.desenharSurfaces(configuracoes.displaySurface,
-						      configuracoes.surfacesAndRectanglesIds,
-							  componentes.surfaces,
-							  componentes.rectangles)
+	configuracoes.uiEstatico.usage = 0 # Nivel de consumo de energia
+	configuracoes.uiEstatico.desenhar()
+
 	sistemas.debug(configuracoes.fonte,
-				   configuracoes.displaySurface,
-				   entidades.Id,
-				   componentes.rectangles,
-				   componentes.botoesDasPortas,
-				   componentes.botoesDasLuzes,
-				   componentes.portas)
-	
-	sistemas.atualizarIntervaloDeClick()
+					configuracoes.displaySurface,
+					entidades.Entidades,
+					componentes.rectangles,
+					componentes.quadros,
+					componentes.estados)
 
+	sistemas.atualizarIntervaloDeClick(componentes.globais["estadoMouse"])
 	pygame.display.update()
+	# print(componentes.momentoEmJogo)
