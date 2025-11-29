@@ -4,6 +4,7 @@ import sistemas
 
 
 class Entidades(Enum):
+	MOUSE 				   = auto()
 	OFFICE	   		   	   = auto()
 	SHOW_STAGE 	   		   = auto()
 	DINING_AREA 	   	   = auto()
@@ -72,6 +73,7 @@ class Bitmasks(IntFlag):
 # }
 
 entidadesMasks = {
+	Entidades.MOUSE					 : Bitmasks.ESTADO,
 	Entidades.OFFICE				 : Bitmasks.SURFACE   | Bitmasks.RECTANGLE | Bitmasks.BACKGROUND,
 	Entidades.SHOW_STAGE			 : Bitmasks.SURFACE   | Bitmasks.RECTANGLE | Bitmasks.ESTADO | Bitmasks.BOTAO  | Bitmasks.BACKGROUND | Bitmasks.CAMERA,
 	Entidades.DINING_AREA			 : Bitmasks.SURFACE   | Bitmasks.RECTANGLE | Bitmasks.ESTADO | Bitmasks.BOTAO  | Bitmasks.BACKGROUND | Bitmasks.CAMERA,

@@ -12,14 +12,6 @@ def desenharSurfaces(displaySurface,
 		displaySurface.blit(surfaces[entidadeId], rectangles[entidadeId])
 
 
-def atualizarIntervaloDeClick(estadoMouse):
-
-	if not estadoMouse["estaDisponivel"]:
-		tempoAtual = pygame.time.get_ticks()
-		if tempoAtual-estadoMouse["ultimoClick"] > estadoMouse["intervaloEntreClicks"]:
-			estadoMouse["estaDisponivel"] = True
-
-
 def atualizarMomentoEmJogo(cameraId,
 						   momentoEmJogo,
 						   momentosEmJogo,

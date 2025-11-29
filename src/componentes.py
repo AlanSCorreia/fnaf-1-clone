@@ -190,6 +190,7 @@ rectangles = {
 }
 
 estados = {
+	entidades.Entidades.MOUSE				: Estado(100),
 	entidades.Entidades.SHOW_STAGE			: Estado(500),
 	entidades.Entidades.DINING_AREA			: Estado(500),
 	entidades.Entidades.PIRATE_COVE			: Estado(500),

@@ -37,7 +37,8 @@ while True:
 								  componentes.quadros)
 			
 		if event.type == pygame.MOUSEBUTTONDOWN:
-			if event.button == 1 and componentes.globais["estadoMouse"]["estaDisponivel"]:
+			if event.button == 1\
+			and componentes.estados[entidades.Entidades.MOUSE].estaDisponivel:
 				# print(pygame.mouse.get_pos())
 				match componentes.globais["momentoEmJogo"]["atual"]:
 					case componentes.MomentosEmJogo.SEM_CAMERA:
@@ -206,6 +207,5 @@ while True:
 					componentes.quadros,
 					componentes.estados)
 
-	sistemas.atualizarIntervaloDeClick(componentes.globais["estadoMouse"])
 	pygame.display.update()
 	# print(componentes.momentoEmJogo)
