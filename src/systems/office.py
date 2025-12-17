@@ -1,21 +1,23 @@
-def update_button_panel_surface(map_id,
+def update_button_panel_surface(left_map_id,
+								right_map_id,
 								states,
 								surfaces,
 								surfaces_imports) -> None:
 
-	panel_id 	    = map_id[0]
-	door_button_id  = map_id[1]
-	light_button_id = map_id[2]
+	for map_id in (left_map_id, right_map_id):
+		if states[map_id[1]].state:
+			
+			if states[map_id[2]].state:
+				surfaces[map_id[0]] = surfaces_imports[map_id[0]][3]
 
-	if states[door_button_id].state:
-		if states[light_button_id].state:
-			surfaces[panel_id] = surfaces_imports[panel_id][3]
+			else:
+				surfaces[map_id[0]] = surfaces_imports[map_id[0]][1]
+
+		elif states[map_id[2]].state:
+			surfaces[map_id[0]] = surfaces_imports[map_id[0]][2]
+
 		else:
-			surfaces[panel_id] = surfaces_imports[panel_id][1]
-	elif states[light_button_id].state:
-		surfaces[panel_id] = surfaces_imports[panel_id][2]
-	else:
-		surfaces[panel_id] = surfaces_imports[panel_id][0]
+			surfaces[map_id[0]] = surfaces_imports[map_id[0]][0]
 
 
 def update_surface(office_id,
@@ -39,28 +41,28 @@ def update_surface(office_id,
 		surfaces[office_id] = surfaces_imports[office_id]["empty"][0]
 
 
-def deny_multiple_lights_on(left_light_id,
-							right_light_id,
-							map_id,
+def deny_multiple_lights_on(left_map_id,
+							right_map_id,
 							states,
 							update_state,
 							current_time,
 							surfaces,
 							surfaces_imports) -> None:
 	
-	if states[left_light_id].state and not states[left_light_id].is_available:
-		if states[right_light_id].state and states[right_light_id].is_available:
-			update_state(right_light_id,
+	if states[left_map_id[2]].state and not states[left_map_id[2]].is_available:
+		if states[right_map_id[2]].state and states[right_map_id[2]].is_available:
+			update_state(right_map_id[2],
 						 current_time,
 						 states)
 
-	elif states[right_light_id].state and not states[right_light_id].is_available:
-		if states[left_light_id].state and states[left_light_id].is_available:
-			update_state(left_light_id,
+	elif states[right_map_id[2]].state and not states[right_map_id[2]].is_available:
+		if states[left_map_id[2]].state and states[left_map_id[2]].is_available:
+			update_state(left_map_id[2],
 						 current_time,
 						 states)
 	
-	update_button_panel_surface(map_id,
+	update_button_panel_surface(left_map_id,
+							 	right_map_id,
 								states,
 								surfaces,
 								surfaces_imports)
