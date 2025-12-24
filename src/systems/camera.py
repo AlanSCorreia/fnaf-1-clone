@@ -90,10 +90,20 @@ def update_background_position(camera_movement_id,
 	# print(deslocamentoComCamera["movimentoDisponivel"])
 
 
-def update_background(room_id,
-					  rectangles,
-					  globals) -> None:
+def update_current_background_position_while_changing_background(room_id,
+																 rectangles,
+																 globals) -> None:
 	
 	x_position = rectangles["backgrounds"][globals.camera_background].x
 	globals.camera_background = room_id
 	rectangles["backgrounds"][globals.camera_background].x = x_position
+
+
+def update_background_surface_based_on_animatronic(animatronic_id,
+												   current_room_index,
+												   routes,
+												   background_surface,
+												   surfaces_imports) -> None:
+	
+	room_id = routes[current_room_index[animatronic_id]]
+	background_surface[room_id] = surfaces_imports[room_id][animatronic_id]
