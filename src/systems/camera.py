@@ -5,6 +5,15 @@ def activate(camera_id,
 			 frames,
 			 states,
 			 update_state) -> None:
+	
+	# Está fazendo 3 coisas:
+		# Checando a colisão do mouse com o botão de ativação da câmera
+		# Atualizando o State da câmera para ativa-lá
+		# Atualizando o estado da animação de ativação da câmera para executa-lá e
+			# definindo que ela não está executando em reverso
+	# O nome também não está bom, pois dá a entender que a função
+	# apenas ativa a câmera quando, na verdade, ela flipa o estado da câmera
+	# ativando E desativando a mesma
 
 	if rectangle.collidepoint(event.pos):
 		if states[camera_id].is_available:

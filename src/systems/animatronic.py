@@ -67,36 +67,56 @@ def attack(animatronic_id,
 	pass
 
 
+def is_at_last_room(animatronic_id,
+					routes,
+					current_room) -> bool:
+	
+	return current_room[animatronic_id] == routes[animatronic_id][len(routes[animatronic_id])-1]
+
+
+def try_enter_office(animatronic_id,
+					 door_id,
+					 office_id,
+					 states,
+					 routes,
+					 current_room_index,
+					 current_room) -> None:
+
+	# caso ele cumpra os requisitos para poder entrar no office
+	if not states[door_id].state:
+
+		# -1 = office
+		current_room_index[animatronic_id] = -1
+		current_room[animatronic_id] = office_id
+
+	# caso ele não consiga entrar para o escritorio
+	else:
+
+		current_room_index[animatronic_id] = routes[animatronic_id]["fail_attempt"]
+		current_room[animatronic_id] = routes[animatronic_id][current_room_index[animatronic_id]]
+
+		print(f"{animatronic_id} is back to: {current_room[animatronic_id]}")
+		# 	mude o indice do animatronico para uma das salas anteriores
+		# (teoricamente, cada animatronico tem uma ou duas sala de retorno especifica)
+		# para que ele continue avançando e mantendo esse loop
+	
+
 def route_progression(animatronic_id,
-					  door_id,
-					  states,
 					  routes,
+					  current_room,
 					  current_room_index) -> None:
-		
+
 	next_room_index = current_room_index[animatronic_id]+1
 	
-	# 	se o indice atual for igual ao tamanho do dicionário de indices
-	# significa que o animatronico já está na sua última sala (porta esquerda ou direita)
-	if len(routes[animatronic_id]) == current_room_index[animatronic_id]:
+	current_room_index[animatronic_id] = next_room_index
 
-		# caso ele cumpra os requisitos para poder entrar no office
-		if not states[door_id].state:
+	if type(routes[animatronic_id][next_room_index]) is list:
 
-			# -1 = office
-			current_room_index[animatronic_id] = -1
+		next_room = random.choice(routes[animatronic_id][next_room_index])
+		current_room[animatronic_id] = next_room
 
-		# caso ele não consiga entrar para o escritorio
-		else:
-			current_room_index[animatronic_id] = routes[animatronic_id]["fail_attempt"]
-			# 	mude o indice do animatronico para uma das salas anteriores
-			# (teoricamente, cada animatronico tem uma ou duas sala de retorno especifica)
-			# para que ele continue avançando e mantendo esse loop
 	else:
-		
-		current_room_index[animatronic_id] = next_room_index
 
-		if type(routes[next_room_index]) is list:
-		
-			list_index = random.randint(0,
-										len( routes[next_room_index] )-1)
-			current_room_index[animatronic_id] = current_room_index[animatronic_id][list_index]
+		current_room[animatronic_id] = routes[animatronic_id][current_room_index[animatronic_id]]
+	
+	print(f"{animatronic_id} advanced to: {current_room[animatronic_id]}")

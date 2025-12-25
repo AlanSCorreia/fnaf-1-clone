@@ -36,12 +36,11 @@ routes = {
 	},
 	flags.Flags.FOXY  : {
 		"fail_attempt": 2,
-		1: flags.Flags.PIRATE_COVE,
-		2: "stage1",
-		3: "stage2",
-		4: "stage3",
-		5: ["stage4_a", "stage4_b"],
-		6: flags.Flags.EAST_HALL,
-		7: flags.Flags.LEFT_DOOR
+		1: (flags.Flags.PIRATE_COVE, "stage1"),
+		2: (flags.Flags.PIRATE_COVE, "stage2"),
+		3: (flags.Flags.PIRATE_COVE, "stage3"),
+		4: (flags.Flags.PIRATE_COVE, ["stage4_a", "stage4_b"]),
+		5: flags.Flags.EAST_HALL,
+		6: flags.Flags.LEFT_DOOR
 	}
 }
