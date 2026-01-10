@@ -1,3 +1,9 @@
+from ..entities import entities_ids, ID
+
+
+CURRENT_BACKGROUND: ID = entities_ids["SHOW_STAGE"]
+
+
 def activate(camera_id,
 			 event,
 			 current_time: int,
@@ -24,54 +30,57 @@ def activate(camera_id,
 			frames[camera_id].is_reversing = not states[camera_id].state
 
 
-def update_dinamic_objects_position(update_position: int,
-									mouse_x_position: int,
-									position_offset: dict[str, int],
-									position_offset_limit: dict[str, int]) -> None:
+def update_office_objects_position(update_position: int,
+								   mouse_x_position: int,
+								   object_position_offset: dict[str, int],
+								   position_offset_limits: dict[str, int]) -> None:
 	""" 
-	Aqui foi necessário mover os Rects dos botoes direitos pois eles estavam sendo 
-	renderizados fora da resolução da tela.
-	resolução.x da tela 1280 vesus a coordenada.x dos rects 1515
-		isso ocorre porque a resolução.x da surface OFFICE é de 1600
-		logo não dava pra clickar pois sempre estava fora do alcance
-	a solução foi mover para a esquerda os Rects sempre que a tela estiver se mexendo
-	para a direita até que estejam no limite da resolução.
-	quando a tela vai para a esquerda os Rects são empurrados de volta para a direita,
-	fora da resolução
+		Aqui foi necessário mover os Rects dos botoes direitos pois eles estavam sendo 
+		renderizados fora da resolução da tela
+		resolução.x da tela 1280 vesus a coordenada.x dos rects 1515
+			isso ocorre porque a resolução.x da surface OFFICE é de 1600
+			logo não dava pra clickar pois sempre estava fora do alcance
+		a solução foi mover para a esquerda os Rects sempre que a tela estiver se mexendo
+		para a direita até que estejam no limite da resolução.
+		quando a tela vai para a esquerda os Rects são empurrados de volta para a direita,
+		fora da resolução
 	"""
 
 	if mouse_x_position > 1100\
-	and position_offset["base"] >= position_offset_limit["min"]:
-		position_offset["vertical"] = -(update_position)
+	and object_position_offset["base"] >= position_offset_limits["left"]:
+
+		object_position_offset["vertical"] = -(update_position)
 
 	elif mouse_x_position < 200\
-	and position_offset["base"] <= position_offset_limit["max"]:
-		position_offset["vertical"] = update_position
+	and object_position_offset["base"] <= position_offset_limits["right"]:
+
+		object_position_offset["vertical"] = update_position
 
 	else:
-		position_offset["vertical"] = 0
 
-	position_offset["base"] += position_offset["vertical"]
+		object_position_offset["vertical"] = 0
+
+	object_position_offset["base"] += object_position_offset["vertical"]
 
 
-def update_direction(camera_movement_id,
-					 current_time,
-					 states,
-					 update_state,
-					 position_offset: dict[str, int | bool],
-					 position_offset_limit: dict[str, int]) -> None:
+def update_camera_direction(camera_movement_id,
+							current_time,
+							states,
+							update_state,
+							background_position_offset: dict[str, int | bool],
+							position_offset_limits: dict[str, int]) -> None:
 
 	if states[camera_movement_id].state:
-		if position_offset["base"] in range(position_offset_limit["min"]-3,
-											position_offset_limit["min"]+3):
+		if background_position_offset["base"] in range(position_offset_limits["left"]-3,
+													   position_offset_limits["left"]+3):
 			update_state(camera_movement_id,
 						 current_time,
 						 states,
 						 False)
 
 	else:
-		if position_offset["base"] in range(position_offset_limit["max"]-3,
-										  	position_offset_limit["max"]+3):
+		if background_position_offset["base"] in range(position_offset_limits["right"]-3,
+										  			   position_offset_limits["right"]+3):
 			update_state(camera_movement_id,
 						 current_time,
 		 				 states,
@@ -84,13 +93,18 @@ def update_background_position(camera_movement_id,
 							   position_offset) -> None:
 
 	if states[camera_movement_id].state:
+
 		if states[camera_movement_id].is_available:
 			position_offset["vertical"] = -(update_position)
+
 		else:
 			position_offset["vertical"] = 0
+
 	else:
+
 		if states[camera_movement_id].is_available:
 			position_offset["vertical"] = update_position
+
 		else:
 			position_offset["vertical"] = 0
 
@@ -99,13 +113,13 @@ def update_background_position(camera_movement_id,
 	# print(deslocamentoComCamera["movimentoDisponivel"])
 
 
-def update_current_background_position_while_changing_background(room_id,
-																 rectangles,
-																 globals) -> None:
+def update_current_background_position_while_changing_background(next_room_background_id: ID,
+																 rectangles) -> None:
+	global CURRENT_BACKGROUND
 	
-	x_position = rectangles["backgrounds"][globals.camera_background].x
-	globals.camera_background = room_id
-	rectangles["backgrounds"][globals.camera_background].x = x_position
+	previous_x_position: int = rectangles["backgrounds"][CURRENT_BACKGROUND].x
+	CURRENT_BACKGROUND = next_room_background_id
+	rectangles["backgrounds"][CURRENT_BACKGROUND].x = previous_x_position
 
 
 def update_background_surface_based_on_animatronic(animatronic_id,
@@ -116,3 +130,4 @@ def update_background_surface_based_on_animatronic(animatronic_id,
 	
 	room_id = routes[current_room_index[animatronic_id]]
 	background_surface[room_id] = surfaces_imports[room_id][animatronic_id]
+

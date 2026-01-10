@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 from ..entities import flags
+=======
+from ..entities import entities_ids
+>>>>>>> e35898a (commit apenas para deixar eu mudar de branch)
 
 
 class Frame:
@@ -21,9 +25,17 @@ class Frame:
 
 
 frames = {
+<<<<<<< HEAD
 	flags.Flags.FAN      		  : Frame( True,  True, False, False, 0, 0, 25),
 	flags.Flags.LEFT_DOOR  	  	  : Frame(False, False, False, False, 0, 0, 25),
 	flags.Flags.RIGHT_DOOR   	  : Frame(False, False, False, False, 0, 0, 25),
 	flags.Flags.CAMERA	       	  : Frame(False, False, False, False, 0, 0, 25),
 	flags.Flags.CAMERA_TRANSITION : Frame(False, False, False,  True, 0, 0, 25)
+=======
+	entities_ids["FAN"				]: Frame( True,  True, False, False, 0, 0, 25),
+	entities_ids["LEFT_DOOR"		]: Frame(False, False, False, False, 0, 0, 25),
+	entities_ids["RIGHT_DOOR"		]: Frame(False, False, False, False, 0, 0, 25),
+	entities_ids["CAMERA"			]: Frame(False, False, False, False, 0, 0, 25),
+	entities_ids["CAMERA_TRANSITION"]: Frame(False, False, False,  True, 0, 0, 25)
+>>>>>>> e35898a (commit apenas para deixar eu mudar de branch)
 }

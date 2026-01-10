@@ -50,9 +50,9 @@ def increment_frame_index(frame_id,
 						  0)
 
 
-def decrement_frame(frame_id,
-					frames,
-					surface_imports):
+def decrement_frame_index(frame_id,
+						  frames,
+						  surface_imports):
 	
 	if frames[frame_id].current_frame > 0:
 
