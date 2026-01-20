@@ -1,41 +1,24 @@
-<<<<<<< HEAD
-from ..entities import flags
-=======
-from ..entities import entities_ids
->>>>>>> e35898a (commit apenas para deixar eu mudar de branch)
+from dataclasses import dataclass
+
+from ..entities import entities_ids, ID
 
 
+@dataclass
 class Frame:
-	def __init__(self,
-			  	 is_animation_playing : bool,
-				 is_looping		   	  : bool,
-				 is_reversing		  : bool,
-				 restart_needed	   	  : bool,
-				 current_frame		  : int,
-				 last_time_frame   	  : float,
-				 frames_delay 		  : float) -> None:
 
-		self.is_animation_playing = is_animation_playing
-		self.is_looping 		  = is_looping
-		self.is_reversing 		  = is_reversing
-		self.restart_needed 	  = restart_needed
-		self.current_frame 		  = current_frame
-		self.last_time_frame 	  = last_time_frame
-		self.frames_delay 		  = frames_delay
+	is_animation_playing: bool
+	is_looping			: bool
+	is_reversing		: bool
+	restart_needed		: bool
+	current_frame		: int = 0
+	last_time_frame		: int = 0
+	frames_delay		: int = 25
 
 
-frames = {
-<<<<<<< HEAD
-	flags.Flags.FAN      		  : Frame( True,  True, False, False, 0, 0, 25),
-	flags.Flags.LEFT_DOOR  	  	  : Frame(False, False, False, False, 0, 0, 25),
-	flags.Flags.RIGHT_DOOR   	  : Frame(False, False, False, False, 0, 0, 25),
-	flags.Flags.CAMERA	       	  : Frame(False, False, False, False, 0, 0, 25),
-	flags.Flags.CAMERA_TRANSITION : Frame(False, False, False,  True, 0, 0, 25)
-=======
-	entities_ids["FAN"				]: Frame( True,  True, False, False, 0, 0, 25),
-	entities_ids["LEFT_DOOR"		]: Frame(False, False, False, False, 0, 0, 25),
-	entities_ids["RIGHT_DOOR"		]: Frame(False, False, False, False, 0, 0, 25),
-	entities_ids["CAMERA"			]: Frame(False, False, False, False, 0, 0, 25),
-	entities_ids["CAMERA_TRANSITION"]: Frame(False, False, False,  True, 0, 0, 25)
->>>>>>> e35898a (commit apenas para deixar eu mudar de branch)
+frames: dict[ID, Frame] = {
+	entities_ids["FAN"				]: Frame( True,  True, False, False),
+	entities_ids["LEFT_DOOR"		]: Frame(False, False, False, False),
+	entities_ids["RIGHT_DOOR"		]: Frame(False, False, False, False),
+	entities_ids["CAMERA"			]: Frame(False, False, False, False),
+	entities_ids["CAMERA_TRANSITION"]: Frame(False, False, False,  True)
 }

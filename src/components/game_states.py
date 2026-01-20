@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-from enum import Enum, auto
-
-
-class GameStates(Enum):
-	MAIN_MENU    	  = auto()
-	MENU_CUSTOM_NIGHT = auto()
-	IN_GAME		  	  = auto()
-=======
 from enum import IntFlag, auto
 
 
@@ -45,4 +36,3 @@ STATE_TRANSITIONS: dict[GameStates, dict[GameEvents, GameStates]] = {
 	GameStates.MENU_CUSTOM_NIGHT: {GameEvents.START_PRESSED	   	  : GameStates.LOADING,
 								   GameEvents.ESCAPE_PRESSED	  : GameStates.MAIN_MENU},
 }
->>>>>>> e35898a (commit apenas para deixar eu mudar de branch)

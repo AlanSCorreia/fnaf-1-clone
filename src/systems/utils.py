@@ -10,18 +10,7 @@ def draw(display_surface,
 		display_surface.blit(surfaces[entityId], rectangles[entityId])
 
 
-def define_energy_usage(energy_usage_id,
-						states) -> int:
-	
-	energy_consumption = 1
-	for id in energy_usage_id:
-		if states[id].state:
-			energy_consumption += 1
-	
-	return energy_consumption
-
-
-def debug(font: pygame.font.Font,
+def debug(font: pygame.Font,
 		  ingame_state,
 		  ingame_states,
 		  globals,
@@ -73,3 +62,4 @@ def debug(font: pygame.font.Font,
 	font_rectangle = font_surface.get_rect(topleft=(0, 0))
 
 	display_surface.blit(font_surface, font_rectangle)
+

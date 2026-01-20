@@ -1,3 +1,4 @@
-from . import animation, animatronic, bitmask, camera, office, state, utils
-__all__ = ["animation", "animatronic", "bitmask",
-		   "camera", "office", "state", "utils"]
+from . import animation, animatronic, camera, office, state, utils
+
+__all__ = ["animation", "animatronic", "camera",
+								"office", "state", "utils"]

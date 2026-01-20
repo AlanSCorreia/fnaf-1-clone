@@ -2,7 +2,6 @@ import sys
 
 import pygame
 
-from components.movement_opportunity_delay import movement_opportunity_delay as delay
 import entities
 
 

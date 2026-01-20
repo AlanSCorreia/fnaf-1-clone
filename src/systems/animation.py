@@ -21,7 +21,7 @@ def update_frame(frame_id,
 				 surface_imports,
 				 current_time):
 
-	frames[frame_id].last_time_frame = current_time
+	frames[frame_id].last_time_frame: int = current_time
 	surfaces[frame_id] = surface_imports[frame_id][frames[frame_id].current_frame]
 
 

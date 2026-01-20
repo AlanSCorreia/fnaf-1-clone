@@ -2,7 +2,7 @@ import pygame
 
 from components.nights import Nights
 from components.game_states import GameStates
-from entities import ID, entities_ids
+from surfaces_imports import import_all_assets
 
 
 pygame.init()
@@ -16,11 +16,8 @@ debug_font: pygame.Font  = pygame.font.Font("fonte\\LcdSolid.ttf", 12)
 font	  : pygame.Font  = pygame.font.Font("fonte\\LcdSolid.ttf")
 clock	  : pygame.Clock = pygame.time.Clock()
 
-static_ui = StaticUI(100, 1)
-camera_static_ui = CameraStaticUI()
-
-game_state				 : GameStates = GameStates.IN_GAME
-current_night			 : Nights 	  = Nights.FIRST
+game_state	 : GameStates = GameStates.IN_GAME
+current_night: Nights 	  = Nights.FIRST
 
 
 position_offset_limits: dict[str, int] = {
@@ -37,3 +34,5 @@ camera_background_position_offset: dict[str, int] = {
 	"vertical": 0,
 	"base": 0
 }
+
+import_all_assets()

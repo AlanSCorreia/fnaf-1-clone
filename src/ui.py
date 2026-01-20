@@ -1,107 +1,100 @@
+from setup import font
 import pygame
 
 
-surfaces = dict()
-rectangles = dict()
-energy_usage = 0
+ui_next_id: int = 0
+ui_surfaces: dict[int, pygame.Surface] = dict()
+ui_rectangles: dict[int, pygame.Rect ] = dict()
+ui_power_usage_bars: int = 2
+ui_power_left_percentage: int = 100
 
 
-def create_static_icon(_id: int,
-					   surface_path: str,
-					   rectangle_coordinate: tuple[int, int]) -> None:
-	global surfaces, rectangles
+def ui_increase_next_id() -> None:
+	global ui_next_id
+
+	ui_next_id += 1
+
+
+def ui_import_static_icon(surface_path: str,
+						  topleft_point: tuple[int, int]) -> None:
+	global ui_surfaces, ui_rectangles
 	
 	surface: pygame.Surface = pygame.image.load(surface_path).convert_alpha()
-	rectangle: pygame.Rect = surface.get_rect(topleft=rectangle_coordinate)
+	rectangle: pygame.Rect = surface.get_rect(topleft=topleft_point)
 	
-	surfaces[_id] = surface
-	rectangles[_id] = rectangle
+	ui_surfaces[ui_next_id  ] = surface
+	ui_rectangles[ui_next_id] = rectangle
+
+	ui_increase_next_id()
 
 
-def create_text(text: str,
-				font: pygame.Font,
-				color: pygame.Color,
-				rectangle_coordinate: tuple[int, int]) -> None:
+def ui_create_static_text(text: str,
+						  font: pygame.Font,
+						  color: pygame.Color,
+						  topleft_point: tuple[int, int]) -> None:
+	global ui_surfaces, ui_rectangles
 	
-	pass
+	text_surface: pygame.Surface = font.render(text, True, color=color)
+	text_rectangle: pygame.Rect = text_surface.get_rect(topleft=topleft_point)
+
+	ui_surfaces[ui_next_id  ] = text_surface
+	ui_rectangles[ui_next_id] = text_rectangle
+
+	ui_increase_next_id()
 
 
-def set_energy_bars(self,
-					display_surface: pygame.Surface,
-					usage: int):
+def increase_power_usage() -> None:
+	global ui_power_usage_bars
+
+	ui_power_usage_bars += 1
+
+
+def decrease_power_usage() -> None:
+	global ui_power_usage_bars
+
+	ui_power_usage_bars -= 1
+
+
+def define_power_usage_percentage(percentage: int) -> None:
+	global ui_power_left_percentage
+
+	ui_power_left_percentage = percentage
+
+
+def draw_energy_bars(display_surface: pygame.Surface,
+					 usage: int) -> None:
 
 	x = 130
-	x_offset = 21
 	y = 650
+	x_offset = 21
 	
-	pygame.draw.rect(display_surface,
-						pygame.Color("green"),
-						((x+(x_offset*usage), y),
-						(16, 32)))
+	for number in range(1, usage):
 
-
-class StaticUI:
-	def __init__(self,
-				 powerLeft: int,
-				 usage: int) -> None:
+		color: str = "green"
 		
-		self.camera_button_surf = pygame.image.load("assets\\6-CAMERAS\\0-FLIP.png").convert_alpha()
-		self.camera_button_rect = self.camera_button_surf.get_rect(topleft=(pygame.display.get_window_size()[0]/2-self.camera_button_surf.get_width()/2-50,
-																	                 pygame.display.get_window_size()[1]-90))
+		if number == 3:
+			color = "yellow"
 		
-		self.power_left_surf = font.render(f"Power Left: {powerLeft:>02}%\n\nUsage: ",
-									                True,
-													pygame.Color("white"))
-		self.power_left_rect = self.power_left_surf.get_rect(topleft=(50, 620))
+		elif number == 4:
+			color = "red"
 
-		self.usage = usage
-
-    # subscription pattern
-	
-
-	def draw(self):
-
-		display_surface.blit(self.camera_button_surf,
-						   		 self.camera_button_rect)
-		display_surface.blit(self.power_left_surf,
-						   		 self.power_left_rect)
-		self.set_power_bars(self.usage)
-
-
-class CameraStaticUI:
-	def __init__(self) -> None:
-		
-		self.minimap_surf = pygame.image.load("assets\\6-CAMERAS\\1-MAP.png").convert_alpha()
-		self.minimap_rect = self.minimap_surf.get_rect(topleft=(840, 320))
-
-		self.rec_icon_surf = pygame.image.load("assets\\6-CAMERAS\\0-REC.png").convert_alpha()
-		self.rec_icon_rect = self.rec_icon_surf.get_rect(topleft=(50, 50)) 
-	
-	def draw(self):
 		pygame.draw.rect(display_surface,
-				   		 pygame.color.Color(255, 255, 255),
-						 ((25, 25), (1215, 670)), 3)
-		display_surface.blit(self.minimap_surf,
-					  		self.minimap_rect)
-		display_surface.blit(self.rec_icon_surf,
-					  		self.rec_icon_rect)
+						 pygame.Color(color),
+						 ((x+(x_offset*number), y),
+						 	   (16, 32)))
 
 
-class Publisher:
-	def __init__(self) -> None:
-		self.subscribers: list[Subscriber] = []
-	
-	def add_subscriber(self, subscriber) -> None:
-		self.subscribers.append(subscriber)
-	
-	def remove_subscriber(self, subscriber) -> None:
-		self.subscribers.remove(subscriber)
-	
-	def send(self, ) -> None:
-		pass
+ui_import_static_icon("FNAF ASSETS REORGANIZED BY ENTEREST\\6-CAMERAS\\0-FLIP.png",
+					  (pygame.display.get_window_size()[0]//2-(600//2)-50,
+					  pygame.display.get_window_size()[1]-90))
 
+ui_import_static_icon("FNAF ASSETS REORGANIZED BY ENTEREST\\6-CAMERAS\\1-MAP.png",
+					  (840, 320))
 
-class Subscriber:
-	def __init__(self) -> None:
-		self.publisher = []
+ui_import_static_icon("FNAF ASSETS REORGANIZED BY ENTEREST\\6-CAMERAS\\0-REC.png",
+					  (50, 50))
 
+ui_create_static_text(f"Power Left: {ui_power_left_percentage:>02}%\n\nUsage: ",
+					  font,
+					  pygame.Color("white"),
+					  (50, 620))
