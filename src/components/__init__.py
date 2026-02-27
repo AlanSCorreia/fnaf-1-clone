@@ -1,16 +1,18 @@
-from . import current_room
-from . import current_room_index
-from . import difficult_levels
-from . import frame
+from . import animatronics
+from . import frames
 from . import game_states
-from . import ingame_states
-from . import movement_opportunity_delay
 from . import nights
 from . import rectangles
-from . import routes
-from . import state
+from . import setup_surfaces
 from . import surfaces
+from . import states
 
-__all__ = ["current_room", "current_room_index", "difficult_levels", "frame",
-		   "game_states", "ingame_states", "movement_opportunity_delay", "nights",
-		   "rectangles", "routes", "state", "surfaces"]
+
+__all__ = ["animatronics",
+								"frames",
+								"game_states",
+								"nights",
+								"rectangles",
+								"setup_surfaces"
+								"surfaces",
+								"states"]

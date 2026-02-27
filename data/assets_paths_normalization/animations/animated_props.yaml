@@ -1,0 +1,12 @@
+FAN normal:
+  path: "FNAF ASSETS REORGANIZED BY ENTEREST/3-THE_OFFICE/FAN/{frame}.png"
+  frame_count: 3
+LEFT_DOOR normal:
+  path: "FNAF ASSETS REORGANIZED BY ENTEREST/3-THE_OFFICE/DOORS/LEFT/{frame}.png"
+  frame_count: 14
+RIGHT_DOOR normal:
+  path: "FNAF ASSETS REORGANIZED BY ENTEREST/3-THE_OFFICE/DOORS/RIGHT/{frame}.png"
+  frame_count: 14
+CAMERA normal:
+  path: "FNAF ASSETS REORGANIZED BY ENTEREST/6-CAMERAS/MONITOR_ANIMATION/{frame}.png"
+  frame_count: 11

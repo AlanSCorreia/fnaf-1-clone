@@ -1,0 +1,22 @@
+current_room_index: 1
+current_room_name: SHOW_STAGE
+movement_opportunity_delay: 3020
+
+difficult_levels:
+  first: 20
+  second: 0
+  third: 1
+  fourth: 1
+  fifth: 3
+  sixth: 4
+  custom: 0
+
+routes:
+  fail_attempt: 5
+  1: SHOW_STAGE
+  2: DINING_AREA
+  3: RESTROOMS
+  4: KITCHEN
+  5: EAST_HALL
+  6: EAST_HALL_CORNER
+  7: RIGHT_DOOR

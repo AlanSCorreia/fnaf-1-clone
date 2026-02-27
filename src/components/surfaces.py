@@ -1,46 +1,62 @@
-from ..entities import flags
-from ..surfaces_imports import backgrounds, inanimate, animated, rooms_buttons
+# import src.custom_types as custom_types
+import src.entities as entities
+import src.components.setup_surfaces as setup_surfaces
 
 
-surfaces = {
-	"backgrounds": {
-		flags.Flags.OFFICE			: backgrounds[flags.Flags.OFFICE		 	 ]["empty" ][0],
-		flags.Flags.SHOW_STAGE		: backgrounds[flags.Flags.SHOW_STAGE 	 ][flags.Flags.FREDDY | flags.Flags.BONNIE | flags.Flags.CHICA][0],
-		flags.Flags.DINING_AREA		: backgrounds[flags.Flags.DINING_AREA	 ]["empty" ],
-		flags.Flags.PIRATE_COVE		: backgrounds[flags.Flags.PIRATE_COVE	 ]["stage1"],
-		flags.Flags.WEST_HALL			: backgrounds[flags.Flags.WEST_HALL  	 ]["empty" ][0],
-		flags.Flags.WEST_HALL_CORNER	: backgrounds[flags.Flags.WEST_HALL_CORNER]["empty" ],
-		flags.Flags.SUPPLY_CLOSET		: backgrounds[flags.Flags.SUPPLY_CLOSET	 ]["empty" ],
-		flags.Flags.EAST_HALL			: backgrounds[flags.Flags.EAST_HALL		 ]["empty" ],
-		flags.Flags.EAST_HALL_CORNER	: backgrounds[flags.Flags.EAST_HALL_CORNER]["empty" ],
-		flags.Flags.BACKSTAGE			: backgrounds[flags.Flags.BACKSTAGE	 	 ]["empty" ],
-		flags.Flags.KITCHEN			: backgrounds[flags.Flags.KITCHEN		 ][0	   ],
-		flags.Flags.RESTROOMS			: backgrounds[flags.Flags.RESTROOMS	 	 ]["empty" ]
-	},
-	"inanimate": {
-		flags.Flags.LEFT_BUTTONS_PANEL : inanimate[flags.Flags.LEFT_BUTTONS_PANEL ][0],
-		flags.Flags.RIGHT_BUTTONS_PANEL: inanimate[flags.Flags.RIGHT_BUTTONS_PANEL][0],
-	},
-	"animated": {
-		flags.Flags.FAN    	: animated[flags.Flags.FAN		 ][0],
-		flags.Flags.LEFT_DOOR : animated[flags.Flags.LEFT_DOOR  ][0],
-		flags.Flags.RIGHT_DOOR: animated[flags.Flags.RIGHT_DOOR ][0],
-	},
-	"static": {
-		flags.Flags.CAMERA		   : animated[flags.Flags.CAMERA			  ][0],
-		flags.Flags.CAMERA_TRANSITION: animated[flags.Flags.CAMERA_TRANSITION][0]
-	},
-	"rooms_buttons": {
-		flags.Flags.SHOW_STAGE 	  : rooms_buttons[flags.Flags.SHOW_STAGE		 ],
-		flags.Flags.DINING_AREA	  : rooms_buttons[flags.Flags.DINING_AREA	 ],
-		flags.Flags.PIRATE_COVE	  : rooms_buttons[flags.Flags.PIRATE_COVE	 ],
-		flags.Flags.WEST_HALL  	  : rooms_buttons[flags.Flags.WEST_HALL		 ],
-		flags.Flags.WEST_HALL_CORNER: rooms_buttons[flags.Flags.WEST_HALL_CORNER],
-		flags.Flags.SUPPLY_CLOSET	  : rooms_buttons[flags.Flags.SUPPLY_CLOSET	 ],
-		flags.Flags.EAST_HALL		  : rooms_buttons[flags.Flags.EAST_HALL	 	 ],
-		flags.Flags.EAST_HALL_CORNER: rooms_buttons[flags.Flags.EAST_HALL_CORNER],
-		flags.Flags.BACKSTAGE		  : rooms_buttons[flags.Flags.BACKSTAGE		 ],
-		flags.Flags.KITCHEN		  : rooms_buttons[flags.Flags.KITCHEN		 ],
-		flags.Flags.RESTROOMS		  : rooms_buttons[flags.Flags.RESTROOMS		 ]
-	}
+CURRENT_BACKGROUNDS= {
+    entities.IDS["OFFICE"			]: setup_surfaces.ALL_BACKGROUNDS[entities.IDS["OFFICE"			  ]]["empty"	],
+    entities.IDS["SHOW_STAGE"		]: setup_surfaces.ALL_BACKGROUNDS[entities.IDS["SHOW_STAGE"		  ]]["with_freddy_bonnie_chica"],
+    entities.IDS["DINING_AREA"		]: setup_surfaces.ALL_BACKGROUNDS[entities.IDS["DINING_AREA"	  ]]["empty"	],
+    entities.IDS["PIRATE_COVE"		]: setup_surfaces.ALL_BACKGROUNDS[entities.IDS["PIRATE_COVE"	  ]]["stage_1"  ],
+    entities.IDS["WEST_HALL"		]: setup_surfaces.ALL_BACKGROUNDS[entities.IDS["WEST_HALL"		  ]]["empty_1"  ],
+    entities.IDS["WEST_HALL_CORNER" ]: setup_surfaces.ALL_BACKGROUNDS[entities.IDS["WEST_HALL_CORNER" ]]["empty"	],
+    entities.IDS["SUPPLY_CLOSET"    ]: setup_surfaces.ALL_BACKGROUNDS[entities.IDS["SUPPLY_CLOSET"	  ]]["empty"	],
+    entities.IDS["EAST_HALL"		]: setup_surfaces.ALL_BACKGROUNDS[entities.IDS["EAST_HALL"		  ]]["empty_1"  ],
+    entities.IDS["EAST_HALL_CORNER" ]: setup_surfaces.ALL_BACKGROUNDS[entities.IDS["EAST_HALL_CORNER" ]]["empty"	],
+    entities.IDS["BACKSTAGE"		]: setup_surfaces.ALL_BACKGROUNDS[entities.IDS["BACKSTAGE"		  ]]["empty"	],
+    entities.IDS["RESTROOMS"		]: setup_surfaces.ALL_BACKGROUNDS[entities.IDS["RESTROOMS"		  ]]["empty"	],
+}
+
+CURRENT_INANIMATED_PROPS = {
+    entities.IDS["LEFT_BUTTONS_PANEL" ]: setup_surfaces.ALL_INANIMATED_PROPS[entities.IDS["LEFT_BUTTONS_PANEL" ]]["all_off"],
+    entities.IDS["RIGHT_BUTTONS_PANEL"]: setup_surfaces.ALL_INANIMATED_PROPS[entities.IDS["RIGHT_BUTTONS_PANEL"]]["all_off"],
+    entities.IDS["LEFT_DOOR"          ]: setup_surfaces.ALL_INANIMATED_PROPS[entities.IDS["LEFT_DOOR"          ]]["opened" ],
+    entities.IDS["RIGHT_DOOR"         ]: setup_surfaces.ALL_INANIMATED_PROPS[entities.IDS["RIGHT_DOOR"         ]]["closed" ],
+}
+
+CURRENT_ANIMATED_PROPS = {
+    entities.IDS["FAN"		 ]: {"normal": setup_surfaces.ALL_ANIMATED_PROPS[entities.IDS["FAN"	      ]]["normal"][1]},
+    entities.IDS["LEFT_DOOR" ]: {"normal": setup_surfaces.ALL_ANIMATED_PROPS[entities.IDS["LEFT_DOOR" ]]["normal"][1]},
+    entities.IDS["RIGHT_DOOR"]: {"normal": setup_surfaces.ALL_ANIMATED_PROPS[entities.IDS["RIGHT_DOOR"]]["normal"][1]},
+}
+
+CURRENT_CAMERA_BUTTONS = {
+    entities.IDS["SHOW_STAGE"	   ]: setup_surfaces.ALL_CAMERA_BUTTONS[entities.IDS["SHOW_STAGE"	  ]],
+    entities.IDS["DINING_AREA"	   ]: setup_surfaces.ALL_CAMERA_BUTTONS[entities.IDS["DINING_AREA"	  ]],
+    entities.IDS["PIRATE_COVE"	   ]: setup_surfaces.ALL_CAMERA_BUTTONS[entities.IDS["PIRATE_COVE"	  ]],
+    entities.IDS["WEST_HALL"	   ]: setup_surfaces.ALL_CAMERA_BUTTONS[entities.IDS["WEST_HALL"		  ]],
+    entities.IDS["WEST_HALL_CORNER"]: setup_surfaces.ALL_CAMERA_BUTTONS[entities.IDS["WEST_HALL_CORNER"]],
+    entities.IDS["SUPPLY_CLOSET"   ]: setup_surfaces.ALL_CAMERA_BUTTONS[entities.IDS["SUPPLY_CLOSET"	  ]],
+    entities.IDS["EAST_HALL"	   ]: setup_surfaces.ALL_CAMERA_BUTTONS[entities.IDS["EAST_HALL"		  ]],
+    entities.IDS["EAST_HALL_CORNER"]: setup_surfaces.ALL_CAMERA_BUTTONS[entities.IDS["EAST_HALL_CORNER"]],
+    entities.IDS["BACKSTAGE"	   ]: setup_surfaces.ALL_CAMERA_BUTTONS[entities.IDS["BACKSTAGE"		  ]],
+    entities.IDS["KITCHEN"		   ]: setup_surfaces.ALL_CAMERA_BUTTONS[entities.IDS["KITCHEN"		  ]],
+    entities.IDS["RESTROOMS"	   ]: setup_surfaces.ALL_CAMERA_BUTTONS[entities.IDS["RESTROOMS"		  ]],
+}
+
+CURRENT_JUMPSCARES = {
+    entities.IDS["FREDDY"]: {
+        "normal"  : setup_surfaces.ALL_JUMPSCARES[entities.IDS["FREDDY"]]["normal"  ][1],
+        "no_power": setup_surfaces.ALL_JUMPSCARES[entities.IDS["FREDDY"]]["no_power"][1]
+    },
+
+    entities.IDS["BONNIE"]: {
+        "normal": setup_surfaces.ALL_JUMPSCARES[entities.IDS["BONNIE"]]["normal"][1]
+    },
+    entities.IDS["CHICA" ]: {
+        "normal": setup_surfaces.ALL_JUMPSCARES[entities.IDS["CHICA" ]]["normal"][1]
+    },
+    entities.IDS["FOXY"  ]: {
+        "normal": setup_surfaces.ALL_JUMPSCARES[entities.IDS["FOXY"  ]]["normal"][1]
+    },
 }

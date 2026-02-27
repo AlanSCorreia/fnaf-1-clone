@@ -1,110 +1,123 @@
-from enum import IntFlag, auto
+import enum
 
-from custom_types import str_ID, int_ID
-
-
-	##################### DECLARATION #####################
-class Bitmasks(IntFlag):
-	ANIMATRONIC  	 = auto()
-	BACKGROUND	  	 = auto()
-	BUTTON 		  	 = auto()
-	CAMERA 		   	 = auto()
-	ENERGY_USAGE	 = auto()
-	FRAME 		  	 = auto()
-	RECTANGLE	  	 = auto()
-	STATE 		  	 = auto()
-	STATIC	  	  	 = auto()
-	SURFACE		  	 = auto()
-	TRANSITION_FRAME = auto()
+import src.import_functions as import_functions
 
 
-next_entity_id: int_ID = 0
-entities_ids: dict[str_ID, int_ID] = dict()
-components_masks: dict[int_ID, Bitmasks] = {}
-filtered_entities_ids: dict[str, list[int_ID]] = {}
+##################### DECLARATION #####################
+
+class Bitmasks(enum.IntFlag):
+	ANIMATION		 = enum.auto()
+	ANIMATRONIC  	 = enum.auto()
+	BACKGROUND	  	 = enum.auto()
+	BUTTON 		  	 = enum.auto()
+	CAMERA 		   	 = enum.auto()
+	DOOR 			 = enum.auto()
+	ENERGY_USAGE	 = enum.auto()
+	STATE 		  	 = enum.auto()
+	SPRITE		  	 = enum.auto()
 
 
-def create_entity(name: str) -> None:
-	global next_entity_id, entities_ids
+ID_NEXT			: int				   = 0
+IDS				: dict[str, 	  int] = dict()
+IDS_FILTERED	: dict[str, list[str]] = dict()
+MASKS_COMPONENTS: dict[int,  Bitmasks] = dict()
 
-	entities_ids[name] = next_entity_id
-	next_entity_id += 1
+
+def create_entity(entity_name: str) -> None:
+	global ID_NEXT, IDS
+
+	IDS[entity_name] = ID_NEXT
+	ID_NEXT += 1
 
 
-def has_component(entity_masks,
-				  component_mask) -> bool:
+def has_component(masks_entity: int,
+				  mask_component: Bitmasks) -> bool:
 	
-    return (entity_masks & component_mask) == component_mask
+    return (masks_entity & mask_component) == mask_component
 
 
-def has_all_components(entities_masks,
-					   components_masks) -> bool:
+def has_all_components(masks_entity: int,
+					   masks_components_strings: list[str] | None=None) -> bool:
+
+	if masks_components_strings is None:
+		return False
+
+	return all(has_component(masks_entity, Bitmasks[mask_component])
+			   for mask_component in masks_components_strings)
+
+
+def has_any_components(masks_entity: int,
+					   masks_components_strings: list[str] | None=None) -> bool:
+
+	if masks_components_strings is None:
+		return False
+
+	return any(has_component(masks_entity, Bitmasks[mask_component])
+			   for mask_component in masks_components_strings)
+
+
+def is_entity_valid_component_archtype(entity_name,
+									   bitmasks_accepted: list[str],
+									   bitmasks_rejected: list[str] | None) -> bool:
+
+	return has_all_components(MASKS_COMPONENTS[IDS[entity_name]],
+								bitmasks_accepted)\
+																			\
+	and not has_any_components(MASKS_COMPONENTS[IDS[entity_name]],
+								bitmasks_rejected)
+
+
+def get_components_archtypes(bitmasks_accepted: list[str],
+							 bitmasks_rejected: list[str] | None) -> list[str]:
 	
-	return all(has_component(entities_masks, component_mask)
-			   for component_mask in components_masks)
+	return list(entity_name for entity_name in IDS.keys()
+				if is_entity_valid_component_archtype(entity_name,
+													  bitmasks_accepted,
+													  bitmasks_rejected))
 
 
-def has_any_components(entities_masks,
-					   components_masks) -> bool:
-	
-    return any(has_component(entities_masks, component_mask)
-			   for component_mask in components_masks)
+def add_components_masks(entity_name: str,
+						 masks_components_string: str) -> None:
+
+	for index, mask_component in enumerate(masks_components_string.split(" | ")):
+
+		if index > 0:
+			MASKS_COMPONENTS[IDS[entity_name]] |= Bitmasks[mask_component]
+			continue
+
+		MASKS_COMPONENTS[IDS[entity_name]] = Bitmasks[mask_component]
 
 
-def filter_entities_by_components(entities_ids: dict[str, int_ID],
-								  components_masks: dict[int_ID, Bitmasks],
-								  accepted_bitmasks: list[Bitmasks],
-								  rejected_bitmasks: list[Bitmasks] | None) -> list[int_ID]:
-	
-	result: list[int_ID] = []
+def add_filtered_id(entity_name: str,
+					components_accepted: list[str],
+					components_rejected: list[str] | list) -> None:
 
-	for entity_id in entities_ids.values():
-		if accepted_bitmasks:
-			if rejected_bitmasks:
-				if has_all_components(components_masks[entity_id], accepted_bitmasks)\
-				and not has_any_components(components_masks[entity_id], rejected_bitmasks):
-					result.append(entity_id)
-
-			else:
-				if has_all_components(components_masks[entity_id], accepted_bitmasks):
-					result.append(entity_id)
-	
-	return result
+	IDS_FILTERED[entity_name] = get_components_archtypes(components_accepted,
+												    	 components_rejected)
 
 
 ##################### DECLARATION #####################
 
 ##################### IMPLEMENTATION #####################
 
-##################### IMPLEMENTATION #####################
 
-#
-	# MOUSE -> 128
-	# OFFICE -> 578
-	# SHOW_STAGE -> 718
-	# DINING_AREA -> 718
-	# PIRATE_COVE -> 718
-	# WEST_HALL -> 718
-	# WEST_HALL_CORNER -> 718
-	# SUPPLY_CLOSET -> 718
-	# EAST_HALL -> 718
-	# EAST_HALL_CORNER -> 718
-	# BACKSTAGE -> 718
-	# KITCHEN -> 718
-	# RESTROOMS -> 718
-	# FAN -> 608
-	# LEFT_DOOR -> 736
-	# RIGHT_DOOR -> 736
-	# LEFT_BUTTONS_PANEL -> 576
-	# RIGHT_BUTTONS_PANEL -> 576
-	# LEFT_DOOR_BUTTON -> 212
-	# RIGHT_DOOR_BUTTON -> 212
-	# LEFT_LIGHT_BUTTON -> 212
-	# RIGHT_LIGHT_BUTTON -> 212
-	# FREDDY -> 2032
-	# BONNIE -> 1888
-	# CHICA -> 128
-	# FOXY -> 1
-	# CAMERA -> 1
-	# CAMERA_WHITE_BARS_TRANSITION -> 1
-	# CAMERA_BACKGROUND_MOVEMENT -> 1
+roots = ("data/entities.yaml", "data/id_filters.yaml")
+
+for entity_name, masks_components_string in import_functions.extract_yaml_data(roots[0]).items():
+
+	create_entity(entity_name)
+
+	add_components_masks(
+		entity_name,
+		masks_components_string
+	)
+
+
+for entity_name, masks_components_dict in import_functions.extract_yaml_data(roots[1]).items():
+	add_filtered_id(
+		entity_name.upper(),
+		masks_components_dict["components_accepted"],
+		masks_components_dict["components_rejected"]
+	)
+
+##################### IMPLEMENTATION #####################

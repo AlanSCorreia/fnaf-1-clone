@@ -1,48 +1,27 @@
-static_surfaces:
-  - [SURFACE, STATIC]
-  - [CAMERA]
+inanimated_props:
+  components_accepted: [SPRITE]
+  components_rejected: [ANIMATION, BACKGROUND]
 
-inanimated_surfaces:
-  - [SURFACE]
-  - [FRAME, STATIC, BACKGROUND]
-
-inanimated_rectangles:
-  - [RECTANGLE]
-  - [FRAME, STATIC, BACKGROUND]
-
-animated_surfaces:
-  - [FRAME, STATIC]
-
-animated_rectangles:
-  - [FRAME, STATIC]
+animated_props:
+  components_accepted: [ANIMATION]
+  components_rejected: null
 
 states:
-  - [STATE]
-
-left_button_panel:
-  - [LEFT_BUTTONS_PANEL,
-     LEFT_DOOR_BUTTON,
-     LEFT_LIGHT_BUTTON]
-
-right_button_panel:
-  - [RIGHT_BUTTONS_PANEL,
-     RIGHT_DOOR_BUTTON,
-     RIGHT_LIGHT_BUTTON]
+  components_accepted: [STATE]
+  components_rejected: null
 
 panel_buttons:
-  - [BUTTON, CAMERA]
+  components_accepted: [BUTTON]
+  components_rejected: [CAMERA]
 
-frames:
-  - [FRAME]
-
-cameras:
-  - [CAMERA]
-
-camera_rooms_buttons:
-  - [BUTTON, CAMERA]
+camera_locations:
+  components_accepted: [CAMERA]
+  components_rejected: null
 
 animatronics:
-  - [ANIMATRONIC]
+  components_accepted: [ANIMATRONIC]
+  components_rejected: null
 
 energy_usage:
-  - [ENERGY_USAGE]  
+  components_accepted: [ENERGY_USAGE]
+  components_rejected: null

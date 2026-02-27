@@ -9,10 +9,10 @@ def movement_opportunity(animatronic_id,
 
 
 def increase_difficult(animatronic_id,
-					   difficult_level,
+					   difficult_level_component,
 					   amount) -> None:
 	
-	difficult_level[animatronic_id] += amount
+	difficult_level_component[animatronic_id] += amount
 
 
 def foxy_camera_stalling(animatronic_id,
@@ -67,20 +67,20 @@ def attack(animatronic_id,
 	pass
 
 
-def is_at_last_room(animatronic_id,
-					routes,
-					current_room) -> bool:
+def is_in_the_last_room(animatronic_id,
+						route_component,
+						current_room_component) -> bool:
 	
-	return current_room[animatronic_id] == routes[animatronic_id][len(routes[animatronic_id])-1]
+	return current_room_component[animatronic_id] == route_component[animatronic_id][len(route_component[animatronic_id])-1]
 
 
-def try_enter_office(animatronic_id,
-					 door_id,
-					 office_id,
-					 states,
-					 routes,
-					 current_room_index,
-					 current_room) -> None:
+def try_enter_the_office(animatronic_id,
+						 door_id,
+						 office_id,
+						 states,
+						 routes,
+						 current_room_index,
+						 current_room) -> None:
 
 	# caso ele cumpra os requisitos para poder entrar no office
 	if not states[door_id].state:
@@ -107,16 +107,14 @@ def route_progression(animatronic_id,
 					  current_room_index) -> None:
 
 	next_room_index = current_room_index[animatronic_id]+1
-	
 	current_room_index[animatronic_id] = next_room_index
 
-	if type(routes[animatronic_id][next_room_index]) is list:
+	if isinstance(routes[animatronic_id][next_room_index], list):
 
 		next_room = random.choice(routes[animatronic_id][next_room_index])
 		current_room[animatronic_id] = next_room
 
 	else:
-
 		current_room[animatronic_id] = routes[animatronic_id][current_room_index[animatronic_id]]
 	
 	print(f"{animatronic_id} advanced to: {current_room[animatronic_id]}")

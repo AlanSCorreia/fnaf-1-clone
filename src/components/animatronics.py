@@ -1,125 +1,53 @@
-from ..entities import flags
+import os
+import dataclasses
+
+import src.components.nights as nights
+import src.import_functions as import_functions
+import src.entities as entities
 
 
-difficult_levels = {
+@dataclasses.dataclass
+class Animatronic:
+	current_room_index: int
+	current_room_name: str
+	movement_opportunity_delay: int
+	difficult_levels: dict[str, int]
+	routes: dict[str, dict[int, str | list[str]]]
 
-	nights.Nights.FIRST : {
-		flags.Flags.FREDDY: 20,
-		flags.Flags.BONNIE: 20,
-		flags.Flags.CHICA : 20,
-		flags.Flags.FOXY  : 20
-	},
 
-	nights.Nights.SECOND: {
-		flags.Flags.FREDDY: 0,
-		flags.Flags.BONNIE: 3,
-		flags.Flags.CHICA : 1,
-		flags.Flags.FOXY  : 1
-	},
+def convert_difficult_levels_keys(difficult_levels):
 
-	nights.Nights.THIRD : {
-		flags.Flags.FREDDY: 1,
-		flags.Flags.BONNIE: 0,
-		flags.Flags.CHICA : 5,
-		flags.Flags.FOXY  : 2
-	},
+	new_difficult_level_dict = dict()
 
-	nights.Nights.FOURTH: {
-		flags.Flags.FREDDY: random.randint(1, 2),
-		flags.Flags.BONNIE: 2,
-		flags.Flags.CHICA : 4,
-		flags.Flags.FOXY  : 6
-	},
-
-	nights.Nights.FIFTH : {
-		flags.Flags.FREDDY: 3,
-		flags.Flags.BONNIE: 5,
-		flags.Flags.CHICA : 7,
-		flags.Flags.FOXY  : 5
-	},
-
-	nights.Nights.SIXTH : {
-		flags.Flags.FREDDY: 4,
-		flags.Flags.BONNIE: 10,
-		flags.Flags.CHICA : 12,
-		flags.Flags.FOXY  : 6
-	},
-
-	nights.Nights.CUSTOM: {
-		flags.Flags.FREDDY: 0,
-		flags.Flags.BONNIE: 0,
-		flags.Flags.CHICA : 0,
-		flags.Flags.FOXY  : 0
-	}
-
-}
-
-movement_opportunity_delay = {
-	flags.Flags.FREDDY: 3020,
-	flags.Flags.BONNIE: 4970,
-	flags.Flags.CHICA : 4980,
-	flags.Flags.FOXY  : 5010
-}
-
-routes = {
-
-	flags.Flags.FREDDY: {
-		"fail_attempt": 5,
-		1: flags.Flags.SHOW_STAGE,
-		2: flags.Flags.DINING_AREA,
-		3: flags.Flags.RESTROOMS,
-		4: flags.Flags.KITCHEN,
-		5: flags.Flags.EAST_HALL,
-		6: flags.Flags.EAST_HALL_CORNER,
-		7: flags.Flags.RIGHT_DOOR
-	},
-
-	flags.Flags.BONNIE: {
-		"fail_attempt": 3,
-		1: flags.Flags.SHOW_STAGE,
-		2: [flags.Flags.BACKSTAGE,
-	  		flags.Flags.DINING_AREA],
-		3: flags.Flags.WEST_HALL,
-		4: [flags.Flags.SUPPLY_CLOSET,
-	  		flags.Flags.WEST_HALL_CORNER],
-		5: flags.Flags.LEFT_DOOR
-	},
-
-	flags.Flags.CHICA : {
-		"fail_attempt": 4,
-		1: flags.Flags.SHOW_STAGE,
-		2: flags.Flags.DINING_AREA,
-		3: [flags.Flags.RESTROOMS,
-			flags.Flags.KITCHEN],
-		4: flags.Flags.EAST_HALL,
-		5: [flags.Flags.DINING_AREA,
-			flags.Flags.EAST_HALL_CORNER],
-		6: [flags.Flags.EAST_HALL,
-			flags.Flags.RIGHT_DOOR]
-	},
-
-	flags.Flags.FOXY  : {
-		"fail_attempt": 2,
-		1: (flags.Flags.PIRATE_COVE, "stage1"),
-		2: (flags.Flags.PIRATE_COVE, "stage2"),
-		3: (flags.Flags.PIRATE_COVE, "stage3"),
-		4: (flags.Flags.PIRATE_COVE, ["stage4_a", "stage4_b"]),
-		5: flags.Flags.EAST_HALL,
-		6: flags.Flags.LEFT_DOOR
-	}
+	for key, value in difficult_levels.items():
+		new_difficult_level_dict[nights.Nights[key.upper()]] = value
 	
-}
+	return new_difficult_level_dict
 
-current_room_index = {
-	flags.Flags.FREDDY: 1,
-	flags.Flags.BONNIE: 3,
-	flags.Flags.CHICA : 4,
-	flags.Flags.FOXY  : 1
-}
 
-current_room = {
-	flags.Flags.FREDDY: routes[flags.Flags.FREDDY][current_room_index[flags.Flags.FREDDY]],
-	flags.Flags.BONNIE: routes[flags.Flags.BONNIE][current_room_index[flags.Flags.BONNIE]],
-	flags.Flags.CHICA : routes[flags.Flags.CHICA ][current_room_index[flags.Flags.CHICA ]],
-	flags.Flags.FOXY  : routes[flags.Flags.FOXY  ][current_room_index[flags.Flags.FOXY  ]]
-}
+def generate_animatronic_object(animatronic_information) -> Animatronic:
+
+	animatronic_information["difficult_levels"] = convert_difficult_levels_keys(animatronic_information["difficult_levels"])
+
+	new_animatronic = Animatronic(
+		animatronic_information["current_room_index"],
+		animatronic_information["current_room_name"],
+		animatronic_information["movement_opportunity_delay"],
+		animatronic_information["difficult_levels"],
+		animatronic_information["routes"]
+	)
+
+	return new_animatronic
+
+
+ANIMATRONICS: dict[int, Animatronic] = dict()
+root = "data/animatronics"
+
+
+for _, _, directories_names in os.walk(root):
+	for directory_name in directories_names:
+
+		animatronic_name: str = directory_name.split(".")[0].upper()
+		animatronic_information = import_functions.extract_yaml_data(f"{root}/{directory_name}")
+
+		ANIMATRONICS[entities.IDS[animatronic_name]] = generate_animatronic_object(animatronic_information)

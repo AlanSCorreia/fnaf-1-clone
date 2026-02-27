@@ -1,7 +1,7 @@
-from enum import Enum, auto
+from enum import IntFlag, auto
 
 
-class Nights(Enum):
+class Nights(IntFlag):
 	FIRST  = auto()
 	SECOND = auto()
 	THIRD  = auto()

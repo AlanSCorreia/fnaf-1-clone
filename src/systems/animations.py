@@ -7,6 +7,25 @@ def animation_queue():
 	pass
 
 
+def update(entity_id: int,
+		   frames: dict,
+		   animation_component: dict) -> None:
+	
+	if frames[entity_id].is_looping:
+		return
+	
+	frame_index = frames[entity_id].current_frame
+	still_running: bool = False
+
+	if frames[entity_id].is_reversing:
+		still_running = frame_index > 0
+	
+	else:
+		still_running = frame_index < len(animation_component[entity_id])-1
+	
+	frames[entity_id].is_animation_playing = still_running
+
+
 def check_frames_delay(frame_id,
 					   frames,
 					   current_time):
@@ -16,13 +35,14 @@ def check_frames_delay(frame_id,
 
 
 def update_frame(frame_id,
-				 surfaces,
 				 frames,
-				 surface_imports,
+				 animation_state,
+				 current_animated_props,
+				 all_animated_surfaces,
 				 current_time):
 
 	frames[frame_id].last_time_frame: int = current_time
-	surfaces[frame_id] = surface_imports[frame_id][frames[frame_id].current_frame]
+	current_animated_props[frame_id][animation_state] = all_animated_surfaces[frame_id][animation_state][frames[frame_id].current_frame]
 
 
 def restart_animation(frame_id,
@@ -37,29 +57,25 @@ def restart_animation(frame_id,
 
 def increment_frame_index(frame_id,
 						  frames,
-						  surface_imports):
+						  all_animated_surfaces):
 	
-	if frames[frame_id].current_frame < len(surface_imports[frame_id])-1:
-
+	if frames[frame_id].current_frame < len(all_animated_surfaces[frame_id])-1:
 		frames[frame_id].current_frame += 1
 
 	else:
-
 		restart_animation(frame_id,
 						  frames,
-						  0)
+						  1)
 
 
 def decrement_frame_index(frame_id,
 						  frames,
-						  surface_imports):
+						  all_animated_surfaces):
 	
 	if frames[frame_id].current_frame > 0:
-
 		frames[frame_id].current_frame -= 1
 		
 	else:
-
 		restart_animation(frame_id,
 						  frames,
-						  len(surface_imports[frame_id])-1)
+						  len(all_animated_surfaces[frame_id])-1)

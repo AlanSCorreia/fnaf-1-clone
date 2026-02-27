@@ -1,0 +1,21 @@
+current_room_index: 1
+current_room_name: PIRATE_COVE_STAGE1
+movement_opportunity_delay: 5010
+
+difficult_levels:
+  first: 20
+  second: 1
+  third: 2
+  fourth: 6
+  fifth: 5
+  sixth: 6
+  custom: 0
+
+routes:
+  fail_attempt: 2
+  1: PIRATE_COVE_STAGE1
+  2: PIRATE_COVE_STAGE2
+  3: PIRATE_COVE_STAGE3
+  4: [PIRATE_COVE_STAGE4_A, PIRATE_COVE_STAGE4_B]
+  5: EAST_HALL
+  6: LEFT_DOOR
