@@ -3,8 +3,6 @@ import dataclasses
 import yaml
 import pygame
 
-import src.custom_types as custom_types
-
 
 @dataclasses.dataclass
 class Animation:
@@ -24,7 +22,7 @@ def extract_yaml_data(path: str) -> dict:
 
 def generate_animation_dict(entity_name: str,
 							animation_state: str,
-							animation_information: dict) -> custom_types.NestedSurfacesDict:
+							animation_information: dict) -> dict:
 
 	animation_object = Animation(
 		entity_name,

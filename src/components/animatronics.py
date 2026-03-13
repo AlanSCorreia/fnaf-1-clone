@@ -9,10 +9,10 @@ import src.entities as entities
 @dataclasses.dataclass
 class Animatronic:
 	current_room_index: int
-	current_room_name: str
+	current_room_name: str | list[str] | None
 	movement_opportunity_delay: int
-	difficult_levels: dict[str, int]
-	routes: dict[str, dict[int, str | list[str]]]
+	difficult_levels: dict[nights.Nights, int]
+	routes: dict[int | str, str | list[str]]
 
 
 def convert_difficult_levels_keys(difficult_levels):

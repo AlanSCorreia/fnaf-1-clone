@@ -1,3 +1,6 @@
+import src.components as components
+
+
 def animation_queue():
 
 	# Adicionar todas as animações ativas a uma queue
@@ -7,75 +10,67 @@ def animation_queue():
 	pass
 
 
-def update(entity_id: int,
-		   frames: dict,
-		   animation_component: dict) -> None:
+def update(entity_id: int) -> None:
 	
-	if frames[entity_id].is_looping:
+	if components.frames.FRAMES[entity_id].is_looping:
 		return
 	
-	frame_index = frames[entity_id].current_frame
+	frame_index = components.frames.FRAMES[entity_id].current_frame
 	still_running: bool = False
 
-	if frames[entity_id].is_reversing:
+	if components.frames.FRAMES[entity_id].is_reversing:
 		still_running = frame_index > 0
 	
 	else:
-		still_running = frame_index < len(animation_component[entity_id])-1
+		still_running = frame_index < len(components.setup_surfaces.ALL_ANIMATED_PROPS[entity_id]["normal"])-1
 	
-	frames[entity_id].is_animation_playing = still_running
+	components.frames.FRAMES[entity_id].is_animation_playing = still_running
 
 
-def check_frames_delay(frame_id,
-					   frames,
-					   current_time):
+def check_frames_delay(
+	frame_id: int,
+	current_time: int
+) -> bool:
+
+	return current_time-components.frames.FRAMES[frame_id].last_time_frame\
+		 > components.frames.FRAMES[frame_id].frames_delay
+
+
+def update_frame(
+	frame_id: int,
+	animation_state: str,
+	current_time: int
+) -> None:
+
+	components.frames.FRAMES[frame_id].last_time_frame: int = current_time
+	components.surfaces.CURRENT_ANIMATED_PROPS[frame_id][animation_state] = components.setup_surfaces.ALL_ANIMATED_PROPS[frame_id][animation_state][components.frames.FRAMES[frame_id].current_frame]
+
+
+def restart_animation(frame_id: int) -> None:
 	
-	return current_time-frames[frame_id].last_time_frame\
-		 > frames[frame_id].frames_delay
+	if components.frames.FRAMES[frame_id].is_looping\
+	or components.frames.FRAMES[frame_id].restart_needed:
+
+		components.frames.FRAMES[frame_id].current_frame = 1
 
 
-def update_frame(frame_id,
-				 frames,
-				 animation_state,
-				 current_animated_props,
-				 all_animated_surfaces,
-				 current_time):
-
-	frames[frame_id].last_time_frame: int = current_time
-	current_animated_props[frame_id][animation_state] = all_animated_surfaces[frame_id][animation_state][frames[frame_id].current_frame]
-
-
-def restart_animation(frame_id,
-					  frames,
-					  index) -> None:
+def increment_frame_index(frame_id):
 	
-	if frames[frame_id].is_looping\
-	or frames[frame_id].restart_needed:
-
-		frames[frame_id].current_frame = index
-
-
-def increment_frame_index(frame_id,
-						  frames,
-						  all_animated_surfaces):
-	
-	if frames[frame_id].current_frame < len(all_animated_surfaces[frame_id])-1:
-		frames[frame_id].current_frame += 1
+	if components.frames.FRAMES[frame_id].current_frame < len(components.setup_surfaces.ALL_ANIMATED_PROPS[frame_id])-1:
+		components.frames.FRAMES[frame_id].current_frame += 1
 
 	else:
-		restart_animation(frame_id,
-						  frames,
-						  1)
+		restart_animation(
+			frame_id
+		)
 
 
-def decrement_frame_index(frame_id,
-						  frames,
-						  all_animated_surfaces):
+def decrement_frame_index(frame_id):
 	
-	if frames[frame_id].current_frame > 0:
-		frames[frame_id].current_frame -= 1
+	if components.frames.FRAMES[frame_id].current_frame > 0:
+		components.frames.FRAMES[frame_id].current_frame -= 1
 		
 	else:
-		restart_animation(frame_id,
-						  frames,
-						  len(all_animated_surfaces[frame_id])-1)
+		restart_animation(
+			frame_id
+		)

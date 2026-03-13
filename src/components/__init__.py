@@ -8,11 +8,13 @@ from . import surfaces
 from . import states
 
 
-__all__ = ["animatronics",
-								"frames",
-								"game_states",
-								"nights",
-								"rectangles",
-								"setup_surfaces"
-								"surfaces",
-								"states"]
+__all__ = [
+	"animatronics",
+	"frames",
+	"game_states",
+	"nights",
+	"rectangles",
+	"setup_surfaces"
+	"surfaces",
+	"states"
+]

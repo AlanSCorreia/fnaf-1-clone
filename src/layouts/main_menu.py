@@ -21,3 +21,5 @@ def exit_game(quit_function) -> None:
 	
     quit_function()
     exit()
+
+

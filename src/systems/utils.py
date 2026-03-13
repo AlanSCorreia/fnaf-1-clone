@@ -1,13 +1,29 @@
+import sys
+
 import pygame
 
 
-def draw(display_surface,
-		 entities_id,
-		 surfaces: dict,
-		 rectangles: dict) -> None:
-	
-	for entityId in entities_id:
-		display_surface.blit(surfaces[entityId], rectangles[entityId])
+def draw_group(
+	display_surface: pygame.Surface,
+	entities_ids: list[int],
+	surfaces: dict,
+	rectangles: dict
+) -> None:
+
+	for entity_id in entities_ids:
+		display_surface.blit(
+			surfaces[entity_id],
+			rectangles[entity_id]
+		)
+
+
+def exit_game(event) -> None:
+
+	if event.type == pygame.QUIT\
+	or event.type == pygame.KEYDOWN\
+	and event.key == pygame.K_ESCAPE:
+		pygame.quit()
+		sys.exit()
 
 
 def debug(font: pygame.Font,

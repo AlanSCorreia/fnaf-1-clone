@@ -1,23 +1,30 @@
 import random
 
+import src.components as components
 
-def movement_opportunity(animatronic_id,
-						 night_id,
-						 difficult_level) -> bool:
-	
+
+def movement_opportunity(
+	animatronic_id,
+	night_id,
+	difficult_level
+) -> bool:
+
 	return random.randint(0, 20) <= difficult_level[night_id][animatronic_id]
 
 
-def increase_difficult(animatronic_id,
-					   difficult_level_component,
-					   amount) -> None:
+def increase_difficult(
+	animatronic_id: int,
+	night_id: components.nights.Nights,
+	amount: int
+) -> None:
 	
-	difficult_level_component[animatronic_id] += amount
+	components.animatronics.ANIMATRONICS[animatronic_id].difficult_levels[night_id] += amount
 
 
-def foxy_camera_stalling(animatronic_id,
-						 camera_id,
-						 states):
+def foxy_camera_stalling(
+	animatronic_id,
+	camera_id
+) -> None:
 	
 	# serve apenas para foxy enquanto no pirate cove e para freddy
 	# no caso do foxy:
@@ -27,9 +34,10 @@ def foxy_camera_stalling(animatronic_id,
 	pass
 
 
-def freddy_camera_stalling(animatronic_id,
-						   camera_id,
-						   states):
+def freddy_camera_stalling(
+	animatronic_id,
+	camera_id
+) -> None:
 
 	# no caso do freddy:
 	# contanto que a câmera tenha sido desativada observando ele,
@@ -43,9 +51,10 @@ def freddy_camera_stalling(animatronic_id,
 	pass
 
 
-def office_stalling(animatronic_id,
-					camera_id,
-					states):
+def office_stalling(
+	animatronic_id,
+	camera_id,
+) -> None:
 
 	# uma vez no escritorio, caso o player não use a camera, o animatronico fica 
 	# incapaz de atacar, porém uma vez que o mesmo utiliza-lá, quando ele a fechar
@@ -54,9 +63,10 @@ def office_stalling(animatronic_id,
 	pass
 
 
-def attack(animatronic_id,
-		   camera_id,
-		   states):
+def attack(
+	animatronic_id,
+	camera_id
+):
 
 	#	se o animatronico conseguir entrar no escritorio, com excessão do Foxy
 	# ele precisa esperar o player ativar a câmera
@@ -67,33 +77,34 @@ def attack(animatronic_id,
 	pass
 
 
-def is_in_the_last_room(animatronic_id,
-						route_component,
-						current_room_component) -> bool:
+def waiting_at_the_door(
+	animatronic_id: int,
+	night_id: components.nights.Nights
+) -> bool:
 	
-	return current_room_component[animatronic_id] == route_component[animatronic_id][len(route_component[animatronic_id])-1]
+	return components.animatronics.ANIMATRONICS[animatronic_id].current_room_name.startswith(
+		("left_door", "right_door")
+	)
 
 
-def try_enter_the_office(animatronic_id,
-						 door_id,
-						 office_id,
-						 states,
-						 routes,
-						 current_room_index,
-						 current_room) -> None:
+def try_enter_the_office(
+	animatronic_id: int,
+	door_id: int,
+	office_id: int,
+	night_id: components.nights.Nights
+) -> None:
 
 	# caso ele cumpra os requisitos para poder entrar no office
-	if not states[door_id].state:
+	if waiting_at_the_door(animatronic_id, night_id) and not components.states.STATES[door_id].state:
 
 		# -1 = office
-		current_room_index[animatronic_id] = -1
-		current_room[animatronic_id] = office_id
+		route_progress(animatronic_id)
 
 	# caso ele não consiga entrar para o escritorio
 	else:
 
-		current_room_index[animatronic_id] = routes[animatronic_id]["fail_attempt"]
-		current_room[animatronic_id] = routes[animatronic_id][current_room_index[animatronic_id]]
+		components.animatronics.ANIMATRONICS[animatronic_id].current_room_index = components.animatronics.ANIMATRONICS[animatronic_id].routes["fail_attempt"]
+		components.animatronics.ANIMATRONICS[animatronic_id].current_room_name = components.animatronics.ANIMATRONICS[animatronic_id].routes[current_room_index[animatronic_id]]
 
 		print(f"{animatronic_id} is back to: {current_room[animatronic_id]}")
 		# 	mude o indice do animatronico para uma das salas anteriores
@@ -101,20 +112,17 @@ def try_enter_the_office(animatronic_id,
 		# para que ele continue avançando e mantendo esse loop
 	
 
-def route_progression(animatronic_id,
-					  routes,
-					  current_room,
-					  current_room_index) -> None:
+# Refatorar
+def route_progress(animatronic_id) -> None:
 
-	next_room_index = current_room_index[animatronic_id]+1
-	current_room_index[animatronic_id] = next_room_index
+	components.animatronics.ANIMATRONICS[animatronic_id].current_room_index += 1
+	next_room_name = components.animatronics.ANIMATRONICS[animatronic_id].routes.get(
+			components.animatronics.ANIMATRONICS[animatronic_id].current_room_index
+		)
 
-	if isinstance(routes[animatronic_id][next_room_index], list):
+	if isinstance(next_room_name, list):
+		next_room_name = random.choice(next_room_name)
 
-		next_room = random.choice(routes[animatronic_id][next_room_index])
-		current_room[animatronic_id] = next_room
-
-	else:
-		current_room[animatronic_id] = routes[animatronic_id][current_room_index[animatronic_id]]
+	components.animatronics.ANIMATRONICS[animatronic_id].current_room_name = next_room_name
 	
-	print(f"{animatronic_id} advanced to: {current_room[animatronic_id]}")
+	print(f"{components.animatronics.ANIMATRONICS[animatronic_id]} advanced to: {components.animatronics.ANIMATRONICS[animatronic_id].current_room_name}")

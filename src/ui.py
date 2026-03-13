@@ -7,7 +7,6 @@ from src.event_emitter import EventEmitter
 class UITextElement(pygame.sprite.Sprite):
 	def __init__(
 		self,
-		ui_id: int,
 		text: str,
 		font: pygame.Font,
 		text_color: pygame.Color,
@@ -16,46 +15,35 @@ class UITextElement(pygame.sprite.Sprite):
 	) -> None:
 
 		super().__init__(groups)
-		self.ui_id: int = ui_id
 		self.image: pygame.Surface = font.render(text, True, color=text_color)
 		self.rect: pygame.Rect = self.image.get_rect(topleft=position)
 		self.event_emitter: EventEmitter = EventEmitter()
 	
-	def update(self):
+	def update(self) -> None:
 		pass
 
 
 class UIStaticElement(pygame.sprite.Sprite):
 	def __init__(
 		self,
-		ui_id: int,
 		image_path: str,
 		position: tuple[int, int],
 		groups: list[pygame.sprite.Group]
 	) -> None:
 
 		super().__init__(groups)
-		self.ui_id = ui_id
 		self.image: pygame.Surface = pygame.image.load(image_path).convert_alpha()
 		self.rect = self.image.get_rect(topleft=position)
 		self.event_emitter = EventEmitter()
 		
-	def update(self):
+	def update(self) -> None:
 		pass
 
-
-ELEMENT_NEXT_ID = 0
 
 POWER_USAGE = {
 	"bars": 2,
 	"left_percentage": 100
 }
-
-
-def increase_id_next() -> None:
-	global ELEMENT_NEXT_ID
-
-	ELEMENT_NEXT_ID += 1
 
 
 def increase_power_usage(power_usage: dict) -> None:
@@ -99,7 +87,7 @@ def draw_power_bars(display_surface: pygame.Surface,
 elements_off_camera_group = pygame.sprite.Group()
 elements_on_camera_group = pygame.sprite.Group()
 
-flip_button = UIStaticElement(ELEMENT_NEXT_ID,
+flip_button = UIStaticElement(
 	"FNAF ASSETS REORGANIZED BY ENTEREST/6-CAMERAS/0-FLIP.png",
 	(
 		pygame.display.get_window_size()[0]//2-(600//2)-50,
@@ -110,30 +98,23 @@ flip_button = UIStaticElement(ELEMENT_NEXT_ID,
 		elements_on_camera_group
 	]
 )
-increase_id_next()
 
 map_icon = UIStaticElement(
-	ELEMENT_NEXT_ID,
 	"FNAF ASSETS REORGANIZED BY ENTEREST/6-CAMERAS/1-MAP.png",
 	(840, 320),
 	[elements_off_camera_group]
 )
-increase_id_next()
 
 rec_icon = UIStaticElement(
-	ELEMENT_NEXT_ID,
 	"FNAF ASSETS REORGANIZED BY ENTEREST/6-CAMERAS/0-REC.png",
 	(50, 50),
 	[elements_off_camera_group]
 )
-increase_id_next()
 
 power_left_percentage = UITextElement(
-	ELEMENT_NEXT_ID,
 	f"Power Left: {POWER_USAGE["left_percentage"]:>02}%\n\nUsage: ",
 	setup.FONT,
 	pygame.Color("white"),
 	(50, 620),
 	[elements_off_camera_group]
 )
-increase_id_next()
