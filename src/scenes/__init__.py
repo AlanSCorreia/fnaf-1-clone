@@ -7,7 +7,7 @@ from . import loading
 from . import main_menu
 from . import night_six_won
 from . import night_won
-from . import scene_context
+from . import context
 from . import week_won
 
 
@@ -21,6 +21,6 @@ __all__ = [
     "main_menu",
     "night_six_won",
     "night_won",
-    "scene_context",
+    "context",
     "week_won"
 ]

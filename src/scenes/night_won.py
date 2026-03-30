@@ -1,4 +1,4 @@
-from src.components.game_states import GameEvents
+from src.ecs.components.game_events import GameEvents
 
 
 class SceneNightWon:
@@ -12,7 +12,12 @@ class SceneNightWon:
     def draws(self) -> None:
         pass
 
-    def state_transition(self, context, event):
+    def state_transition(
+        self,
+        context,
+        event
+    ) -> None:
+
         from src.scenes.loading import SceneLoading
 
         if event == GameEvents.TIME_PASSED:

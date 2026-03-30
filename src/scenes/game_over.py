@@ -1,5 +1,5 @@
 from src.scenes.main_menu import SceneMainMenu
-from src.components.game_states import GameEvents
+from src.ecs.components.game_events import GameEvents
 
 
 class SceneGameOver:
@@ -13,6 +13,11 @@ class SceneGameOver:
     def draws(self) -> None:
         pass
     
-    def state_transition(self, context, event):
+    def state_transition(
+        self,
+        context,
+        event
+    ) -> None:
+
         if event == GameEvents.TIME_PASSED:
             context.set_state(SceneMainMenu())

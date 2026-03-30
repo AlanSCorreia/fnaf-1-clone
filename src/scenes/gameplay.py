@@ -1,26 +1,40 @@
+import pygame
+
 from src.scenes.game_over import SceneGameOver
 from src.scenes.night_won import SceneNightWon
 from src.scenes.main_menu import SceneMainMenu
-from src.components.game_states import GameEvents
+from src.ecs.components.game_events import GameEvents
 
 
 class SceneGameplay:
     
-    def events(self) -> None:
+    def events(
+        self
+    ) -> None:
         pass
 
-    def updates(self) -> None:
+    def updates(
+        self
+    ) -> None:
         pass
 
-    def draws(self) -> None:
+    def draws(
+        self
+    ) -> None:
         pass
 
-    def state_transition(self, context, event):
+    def state_transition(
+        self,
+        context,
+        event: pygame.Event
+    ) -> None:
+    
         if event == GameEvents.DIED:
             context.set_state(SceneGameOver())
 
         elif event == GameEvents.SURVIVED:
             context.set_state(SceneNightWon())
         
-        elif event == GameEvents.ESCAPE_PRESSED:
+        elif event.type == pygame.KEYDOWN\
+        and  event.key  == pygame.K_ESCAPE:
             context.set_state(SceneMainMenu())

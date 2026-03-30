@@ -1,0 +1,39 @@
+FAN:
+  is_linked_to: None
+  is_animation_playing: True
+  is_looping: True
+  is_reversing: False
+  restart_needed: False
+  current_frame: 1
+  last_time_frame: 0
+  frames_delay: 25
+
+LEFT_DOOR:
+  is_linked_to: None
+  is_animation_playing: False
+  is_looping: False
+  is_reversing: False
+  restart_needed: False
+  current_frame: 1
+  last_time_frame: 0
+  frames_delay: 25
+
+RIGHT_DOOR:
+  is_linked_to: None
+  is_animation_playing: False
+  is_looping: False
+  is_reversing: False
+  restart_needed: False
+  current_frame: 1
+  last_time_frame: 0
+  frames_delay: 25
+
+CAMERA:
+  is_linked_to: None
+  is_animation_playing: False
+  is_looping: False
+  is_reversing: False
+  restart_needed: False
+  current_frame: 1
+  last_time_frame: 0
+  frames_delay: 25

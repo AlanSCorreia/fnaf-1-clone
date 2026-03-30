@@ -1,5 +1,5 @@
 from src.scenes.gameplay import SceneGameplay
-from src.components.game_states import GameEvents
+from src.ecs.components.game_events import GameEvents
 
 
 class SceneLoading:
@@ -13,6 +13,11 @@ class SceneLoading:
     def draws(self) -> None:
         pass
 
-    def state_transition(self, context, event):
+    def state_transition(
+        self,
+        context,
+        event
+    ) -> None:
+    
         if event == GameEvents.TIME_PASSED:
             context.set_state(SceneGameplay())
