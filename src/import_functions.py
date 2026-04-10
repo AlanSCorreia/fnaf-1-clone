@@ -5,14 +5,16 @@ import pygame
 
 
 @dataclasses.dataclass
-class Animation:
+class AnimationSource:
 	entity_name: str
 	state: str
 	path: str
 	frame_count: int
 
 
-def extract_yaml_data(path: str) -> dict:
+def extract_yaml_data(
+	path: str
+) -> dict:
 	
 	with open(path) as stream:
 		file = yaml.safe_load(stream)
@@ -20,11 +22,13 @@ def extract_yaml_data(path: str) -> dict:
 	return file
 
 
-def generate_animation_dict(entity_name: str,
-							animation_state: str,
-							animation_information: dict) -> dict:
+def generate_animation_dict(
+	entity_name: str,
+	animation_state: str,
+	animation_information: dict
+) -> dict:
 
-	animation_object = Animation(
+	animation_object = AnimationSource(
 		entity_name,
 		animation_state,
 		animation_information["path"],
@@ -42,9 +46,9 @@ def generate_animation_dict(entity_name: str,
 	return new_animation_dict
 
 
-def generate_animations(file_path) -> dict:
-
-	import src.entities as entities
+def generate_animations(
+	file_path: str
+) -> dict:
 
 	animations_dicts = extract_yaml_data(file_path)
 	new_dict: dict = dict()
@@ -52,20 +56,22 @@ def generate_animations(file_path) -> dict:
 	for entity_name_state, animation_information in animations_dicts.items():
 		entity_name, animation_state = entity_name_state.split(" ")
 
-		if entities.IDS[entity_name] not in new_dict:
-			new_dict[entities.IDS[entity_name]] = dict()
+		if entity_name not in new_dict:
+			new_dict[entity_name] = dict()
 
-		new_dict[entities.IDS[entity_name]][animation_state] = generate_animation_dict(
+		new_dict[entity_name][animation_state] = generate_animation_dict(
 			entity_name,
 			animation_state,
 			animation_information
 		)
-		# print(f"{inner_id_str} -> {nested_frames[entities.IDS[id_str]][inner_id_str]}")
+		# print(f"{inner_id_str} -> {nested_frames[id_str][inner_id_str]}")
 
 	return new_dict
 
 
-def generate_surfaces_from_nested_dict(surfaces_dictionary: dict) -> dict:
+def generate_surfaces_from_nested_dict(
+	surfaces_dictionary: dict
+) -> dict:
 	
 	temporary_dict = dict()
 	
@@ -75,23 +81,27 @@ def generate_surfaces_from_nested_dict(surfaces_dictionary: dict) -> dict:
 	return temporary_dict
 
 
-def converted_yaml_dicts(data) -> dict:
-	import src.entities as entities
+def converted_yaml_dicts(
+	data: dict
+) -> dict:
 
 	new_dict = dict()
 
 	for entity_name, value in data.items():
 		
 		if isinstance(value, dict):
-			new_dict[entities.IDS[entity_name]] = generate_surfaces_from_nested_dict(value)
+			new_dict[entity_name] = generate_surfaces_from_nested_dict(value)
 
 		else:
-			new_dict[entities.IDS[entity_name]] = pygame.image.load(value).convert_alpha()
+			new_dict[entity_name] = pygame.image.load(value).convert_alpha()
 	
 	return new_dict
 
 
-def extracted_dicts_from_yaml(directory_path):
-	extracted_data = extract_yaml_data(directory_path)
+def extracted_dicts_from_yaml(
+	directory_path: str
+) -> dict:
 
-	return converted_yaml_dicts(extracted_data)
+	return converted_yaml_dicts(
+		extract_yaml_data(directory_path)
+	)

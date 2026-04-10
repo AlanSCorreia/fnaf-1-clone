@@ -1,30 +1,23 @@
-# Todo:
-#	Objetos como State e Frame tem várias redundancias que pode ser unificadas
-#	Mudar o background das cameras com base na sala que eles estão
-#	Adicionar tempo que demora cada hora da noite
-#	Adicionar a mecânica de energia
-#	Mudar o background do Office assim que a energia acabar
-import src.setup				  as setup
-import src.entities				  as entities
-import src.systems				  as systems
-import src.components			  as components
-import src.scenes as scenes
+import src.setup	  as setup
+import src.ecs.entities	  as entities
+import src.ecs.systems	  as systems
+import src.ecs.components as components
+import src.scenes	  as scenes
 
 
-CURRENT_NIGHT = components.nights.Nights.FIRST
-SCENE_CONTEXT = scenes.scene_context.SceneContext(setup.DISPLAY_SURFACE)
+def game_loop():
+	current_night = components.nights.Nights.FIRST
+	scene_context = scenes.context.SceneContext(setup.DISPLAY_SURFACE)
 
 
-while True:
+	while True:
 
-	DELTA_TIME: float = setup.CLOCK.tick(120)/1000
-	CURRENT_TIME: int = setup.pygame.time.get_ticks()
-	MOUSE_POSITION: tuple[int, int] = setup.pygame.mouse.get_pos()
-	UPDATE_POSITION_WITHOUT_CAMERA: int = int(500*DELTA_TIME)
-	UPDATE_POSITION_WITH_CAMERA: int = int(150*DELTA_TIME)
+		delta_time: float = setup.CLOCK.tick(120)/1000
+		current_time: int = setup.pygame.time.get_ticks()
+		mouse_position: tuple[int, int] = setup.pygame.mouse.get_pos()
+		update_position_without_camera: int = int(500*delta_time)
+		update_position_with_camera: int = int(150*delta_time)
 
-	
+		scene_context.run_loop()
 
-	SCENE_CONTEXT.run_loop()
-
-	setup.pygame.display.update()
+		setup.pygame.display.update()

@@ -46,11 +46,16 @@ POWER_USAGE = {
 }
 
 
-def increase_power_usage(power_usage: dict) -> None:
+def increase_power_usage(
+	power_usage: dict
+) -> None:
+
 	power_usage["bars"] += 1
 
 
-def decrease_power_usage(power_usage: dict) -> None:
+def decrease_power_usage(
+	power_usage: dict
+) -> None:
 	power_usage["bars"] -= 1
 
 
@@ -58,6 +63,7 @@ def define_power_usage_percentage(
 	power_usage: dict,
 	percentage: int
 ) -> None:
+
 	power_usage["left_percentage"] = percentage
 
 
