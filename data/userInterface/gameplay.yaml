@@ -1,0 +1,38 @@
+flip_button:
+  type: static
+  image_path: FNAF ASSETS REORGANIZED BY ENTEREST/6-CAMERAS/0-FLIP.png
+  position:
+    x: 390
+    y: 630
+  groups:
+    - off_camera
+    - on_camera
+
+map_icon:
+  type: static
+  image_path: FNAF ASSETS REORGANIZED BY ENTEREST/6-CAMERAS/1-MAP.png
+  position:
+    x: 840
+    y: 320
+  groups:
+    - off_camera
+
+rec_icon:
+  type: static
+  image_path: FNAF ASSETS REORGANIZED BY ENTEREST/6-CAMERAS/0-REC.png
+  position:
+    x: 50
+    y: 50
+  groups:
+    - off_camera
+
+power_left_percentage:
+  type: text
+  font: LcdSolid
+  message: "Power Left: {POWER_USAGE[\"left_percentage\"]:>02}%\n\nUsage:"
+  color: white
+  position:
+    x: 50
+    y: 620
+  groups:
+    - off_camera
