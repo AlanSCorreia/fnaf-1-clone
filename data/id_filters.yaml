@@ -1,0 +1,27 @@
+inanimated_props:
+  components_accepted: [SPRITE]
+  components_rejected: [ANIMATION, BACKGROUND]
+
+animated_props:
+  components_accepted: [ANIMATION]
+  components_rejected: null
+
+states:
+  components_accepted: [STATE]
+  components_rejected: null
+
+panel_buttons:
+  components_accepted: [BUTTON]
+  components_rejected: [CAMERA]
+
+camera_locations:
+  components_accepted: [CAMERA]
+  components_rejected: null
+
+animatronics:
+  components_accepted: [ANIMATRONIC]
+  components_rejected: null
+
+energy_usage:
+  components_accepted: [ENERGY_USAGE]
+  components_rejected: null

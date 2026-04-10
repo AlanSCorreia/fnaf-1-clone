@@ -1,0 +1,38 @@
+flip_button:
+  type: static
+  image_path: FNAF ASSETS REORGANIZED BY ENTEREST/6-CAMERAS/0-FLIP.png
+  position:
+    x: pygame.display.get_window_size()[0]//2-(600//2)-50
+    y: pygame.display.get_window_size()[1]-90
+  groups:
+    - elements_off_camera_group
+    - elements_on_camera_group
+
+map_icon:
+  type: static
+  image_path: FNAF ASSETS REORGANIZED BY ENTEREST/6-CAMERAS/1-MAP.png
+  position:
+    x: 840
+    y: 320
+  groups:
+    - elements_off_camera_group
+
+rec_icon:
+  type: static
+  image_path: FNAF ASSETS REORGANIZED BY ENTEREST/6-CAMERAS/0-REC.png
+  position:
+    x: 50
+    y: 50
+  groups:
+    - elements_off_camera_group
+
+power_left_percentage:
+  type: text
+  font: LcdSolid
+  messege: "Power Left: {POWER_USAGE[\"left_percentage\"]:>02}%\n\nUsage:"
+  color: white
+  position:
+    x: 50
+    y: 620
+  groups:
+    - elements_off_camera_group
