@@ -1,0 +1,119 @@
+MOUSE:
+  state: false
+  is_available: true
+  last_availability_time: 0
+  availability_delay: 100
+
+SHOW_STAGE:
+  state: false
+  is_available: true
+  last_availability_time: 0
+  availability_delay: 500
+
+DINING_AREA:
+  state: false
+  is_available: true
+  last_availability_time: 0
+  availability_delay: 500
+
+PIRATE_COVE:
+  state: false
+  is_available: true
+  last_availability_time: 0
+  availability_delay: 500
+
+WEST_HALL:
+  state: false
+  is_available: true
+  last_availability_time: 0
+  availability_delay: 500
+
+WEST_HALL_CORNER:
+  state: false
+  is_available: true
+  last_availability_time: 0
+  availability_delay: 500
+
+SUPPLY_CLOSET:
+  state: false
+  is_available: true
+  last_availability_time: 0
+  availability_delay: 500
+
+EAST_HALL:
+  state: false
+  is_available: true
+  last_availability_time: 0
+  availability_delay: 500
+
+EAST_HALL_CORNER:
+  state: false
+  is_available: true
+  last_availability_time: 0
+  availability_delay: 500
+
+BACKSTAGE:
+  state: false
+  is_available: true
+  last_availability_time: 0
+  availability_delay: 500
+
+KITCHEN:
+  state: false
+  is_available: true
+  last_availability_time: 0
+  availability_delay: 500
+
+RESTROOMS:
+  state: false
+  is_available: true
+  last_availability_time: 0
+  availability_delay: 500
+
+LEFT_DOOR:
+  state: false
+  is_available: true
+  last_availability_time: 0
+  availability_delay: 500
+
+RIGHT_DOOR:
+  state: false
+  is_available: true
+  last_availability_time: 0
+  availability_delay: 500
+
+LEFT_DOOR_BUTTON:
+  state: false
+  is_available: true
+  last_availability_time: 0
+  availability_delay: 500
+
+RIGHT_DOOR_BUTTON:
+  state: false
+  is_available: true
+  last_availability_time: 0
+  availability_delay: 500
+
+LEFT_LIGHT_BUTTON:
+  state: false
+  is_available: true
+  last_availability_time: 0
+  availability_delay: 250
+
+RIGHT_LIGHT_BUTTON:
+  state: false
+  is_available: true
+  last_availability_time: 0
+  availability_delay: 250
+
+CAMERA:
+  state: false
+  is_available: true
+  last_availability_time: 0
+  availability_delay: 500
+
+CAMERA_MOVEMENT:
+  state: true
+  is_available: true
+  last_availability_time: 0
+  availability_delay: 1000

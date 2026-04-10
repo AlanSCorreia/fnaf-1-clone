@@ -1,0 +1,19 @@
+BONNIE normal:
+  path: "FNAF ASSETS REORGANIZED BY ENTEREST/3-THE_OFFICE/JUMPSCARES/2-BONNIE/{frame}.png"
+  frame_count: 11
+
+CHICA normal:
+  path: "FNAF ASSETS REORGANIZED BY ENTEREST/3-THE_OFFICE/JUMPSCARES/3-CHICA/{frame}.png"
+  frame_count: 16
+
+FOXY normal:
+  path: "FNAF ASSETS REORGANIZED BY ENTEREST/3-THE_OFFICE/FOXY/{frame}.png"
+  frame_count: 20
+
+FREDDY normal:
+  path: "FNAF ASSETS REORGANIZED BY ENTEREST/3-THE_OFFICE/JUMPSCARES/1-FREDDY/{frame}.png"
+  frame_count: 29
+
+FREDDY no_power:
+  path: "FNAF ASSETS REORGANIZED BY ENTEREST/3-THE_OFFICE/JUMPSCARES/1-FREDDY_LIGHTS_OUT/{frame}.png"
+  frame_count: 20
