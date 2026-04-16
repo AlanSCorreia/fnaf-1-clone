@@ -19,7 +19,7 @@ ANIMATIONS: dict[str, AnimationData] = dict()
 
 
 for entity_name, animation_data in import_functions\
-										.extract_yaml_data("data/components/frames.yaml")\
+										.extract_yaml_data("data/components/animations.yaml")\
 										.items():
 
 	ANIMATIONS[entity_name] = AnimationData(
