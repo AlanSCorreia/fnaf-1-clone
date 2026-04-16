@@ -83,36 +83,3 @@ def draw_power_bars(
 						 pygame.Color(color),
 						 ((x+(x_offset*number), y),
 						 	   (16, 32)))
-
-
-# flip_button = UIStaticElement(
-# 	"FNAF ASSETS REORGANIZED BY ENTEREST/6-CAMERAS/0-FLIP.png",
-# 	(
-# 		pygame.display.get_window_size()[0]//2-(600//2)-50,
-# 		pygame.display.get_window_size()[1]-90
-# 	),
-# 	[
-# 		elements_off_camera_group,
-# 		elements_on_camera_group
-# 	]
-# )
-
-# map_icon = UIStaticElement(
-# 	"FNAF ASSETS REORGANIZED BY ENTEREST/6-CAMERAS/1-MAP.png",
-# 	(840, 320),
-# 	[elements_off_camera_group]
-# )
-
-# rec_icon = UIStaticElement(
-# 	"FNAF ASSETS REORGANIZED BY ENTEREST/6-CAMERAS/0-REC.png",
-# 	(50, 50),
-# 	[elements_off_camera_group]
-# )
-
-# power_left_percentage = UITextElement(
-# 	f"Power Left: {POWER_USAGE["left_percentage"]:>02}%\n\nUsage: ",
-# 	setup.FONT,
-# 	pygame.Color("white"),
-# 	(50, 620),
-# 	[elements_off_camera_group]
-# )

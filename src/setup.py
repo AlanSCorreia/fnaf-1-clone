@@ -4,7 +4,8 @@ import pygame
 pygame.init()
 
 DISPLAY_SURFACE: pygame.Surface = pygame.display.set_mode((1280, 720),
-										  	  	   pygame.FULLSCREEN)
+										  	  	   pygame.FULLSCREEN,
+												   display=0)
 
 pygame.display.set_caption("FNAF 1 Clone")
 

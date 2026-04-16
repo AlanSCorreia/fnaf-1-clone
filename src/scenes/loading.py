@@ -3,6 +3,12 @@ from src.scenes.game_events import GameEvents
 
 
 class SceneLoading:
+    def __init__(
+        self,
+        context
+    ) -> None:
+
+        self.context = context
     
     def events(self) -> None:
         pass
@@ -15,9 +21,8 @@ class SceneLoading:
 
     def state_transition(
         self,
-        context,
         event
     ) -> None:
     
         if event == GameEvents.TIME_PASSED:
-            context.set_state(SceneGameplay())
+            self.context.set_state(SceneGameplay(self.context))

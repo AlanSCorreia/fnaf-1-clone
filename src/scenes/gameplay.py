@@ -9,6 +9,12 @@ from src.userInterface.implementation import GROUPS
 
 
 class SceneGameplay:
+    def __init__(
+        self,
+        context
+    ) -> None:
+
+        self.context = context
     
     def events(
         self
@@ -29,16 +35,15 @@ class SceneGameplay:
 
     def state_transition(
         self,
-        context,
         event: pygame.Event
     ) -> None:
     
         if event == GameEvents.DIED:
-            context.set_state(SceneGameOver())
+            self.context.set_state(SceneGameOver(self.context))
 
         elif event == GameEvents.SURVIVED:
-            context.set_state(SceneNightWon())
+            self.context.set_state(SceneNightWon(self.context))
         
         elif event.type == pygame.KEYDOWN\
         and  event.key  == pygame.K_ESCAPE:
-            context.set_state(SceneMainMenu())
+            self.context.set_state(SceneMainMenu(self.context))

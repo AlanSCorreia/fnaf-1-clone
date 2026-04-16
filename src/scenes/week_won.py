@@ -3,6 +3,12 @@ from src.scenes.game_events import GameEvents
 
 
 class SceneWeekWon:
+    def __init__(
+        self,
+        context
+    ) -> None:
+
+        self.context = context
     
     def events(self) -> None:
         pass
@@ -15,9 +21,8 @@ class SceneWeekWon:
 
     def state_transition(
         self,
-        context,
         event
     ) -> None:
 
         if event == GameEvents.TIME_PASSED:
-            context.set_state(SceneMainMenu())
+            self.context.set_state(SceneMainMenu(self.context))

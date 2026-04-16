@@ -21,16 +21,7 @@ ANIMATIONS: dict[str, AnimationData] = dict()
 for entity_name, animation_data in import_functions\
 										.extract_yaml_data("data/components/frames.yaml")\
 										.items():
-	# ANIMATIONS[entity_name] = AnimationData(
-	# 	animation_data[""],
-	# 	animation_data["is_animation_playing"],
-	# 	animation_data["is_looping"],
-	# 	animation_data["is_reversing"],
-	# 	animation_data["restart_needed"],
-	# 	animation_data["current_frame"],
-	# 	animation_data["last_time_frame"],
-	# 	animation_data["frames_delay"]
-	# )
+
 	ANIMATIONS[entity_name] = AnimationData(
 		**animation_data
 	)

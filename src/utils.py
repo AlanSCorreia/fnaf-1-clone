@@ -26,6 +26,21 @@ def exit_game(event) -> None:
 		sys.exit()
 
 
+def mouse_hover(
+	mouse_position: tuple[int, int],
+	rectangle: pygame.Rect
+) -> bool:
+
+	return rectangle.collidepoint(mouse_position)
+
+
+def set_timer(interval: int) -> int:
+	custom_event = pygame.event.custom_type()
+	pygame.time.set_timer(custom_event, interval)
+
+	return custom_event
+
+
 def debug(font: pygame.Font,
 		  ingame_state,
 		  ingame_states,

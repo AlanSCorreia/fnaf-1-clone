@@ -1,25 +1,18 @@
-import src.setup_surfaces as setup_surfaces
-
-
-CURRENT_ANIMATED_PROPS = {
-	"FAN"		: {"normal": setup_surfaces.ALL_ANIMATED_PROPS["FAN"	   ]["normal"][1]},
-	"LEFT_DOOR" : {"normal": setup_surfaces.ALL_ANIMATED_PROPS["LEFT_DOOR" ]["normal"][1]},
-	"RIGHT_DOOR": {"normal": setup_surfaces.ALL_ANIMATED_PROPS["RIGHT_DOOR"]["normal"][1]},
+# Preferencia, só precisa ficar mais especifico
+# talvez pensando em projetos futuros
+ANIMATED_PROPS = {
+	"FAN"		: {0: {"state": "normal", "frame": 1}},
+	"LEFT_DOOR" : {0: {"state": "normal", "frame": 1}},
+	"RIGHT_DOOR": {0: {"state": "normal", "frame": 1}},
 }
 
-CURRENT_JUMPSCARES = {
+JUMPSCARES = {
 	"FREDDY": {
-		"normal"  : setup_surfaces.ALL_JUMPSCARES["FREDDY"]["normal"  ][1],
-		"no_power": setup_surfaces.ALL_JUMPSCARES["FREDDY"]["no_power"][1]
+		0: {"state": "normal", "frame": 1},
+		1: {"state": "no_power", "frame": 1}
 	},
 
-	"BONNIE": {
-		"normal": setup_surfaces.ALL_JUMPSCARES["BONNIE"]["normal"][1]
-	},
-	"CHICA" : {
-		"normal": setup_surfaces.ALL_JUMPSCARES["CHICA" ]["normal"][1]
-	},
-	"FOXY"  : {
-		"normal": setup_surfaces.ALL_JUMPSCARES["FOXY"  ]["normal"][1]
-	},
+	"BONNIE": {0: {"state": "normal", "frame": 1}},
+	"CHICA" : {0: {"state": "normal", "frame": 1}},
+	"FOXY"  : {0: {"state": "normal", "frame": 1}},
 }

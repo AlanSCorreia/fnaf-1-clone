@@ -13,16 +13,10 @@ class StateData:
 	availability_delay: int = 0
 
 
-STATES: dict[int, StateData] = dict()
-
 yaml_file = import_functions.extract_yaml_data("data/components/states.yaml")
 
 
-for entitiy_id, values in yaml_file.items():
-	STATES[entities.IDS[entitiy_id]] = StateData(
-		# values["state"],
-		# values["is_available"],
-		# values["last_availability_time"],
-		# values["availability_delay"]
-		**values
-	)
+STATES: dict[int, StateData] = {
+	entities.IDS[entity_id]: StateData(**values)
+	for entity_id, values in yaml_file.items()
+}

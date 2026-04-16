@@ -1,4 +1,3 @@
-from src.scenes.gameplay import SceneGameplay
 from src.scenes.intro import SceneIntro
 
 
@@ -8,7 +7,7 @@ class SceneContext:
         display_surface
     ) -> None:
 
-        self._state = SceneGameplay()
+        self._state = SceneIntro(self)
         self._display_surface = display_surface
     
     def set_state(

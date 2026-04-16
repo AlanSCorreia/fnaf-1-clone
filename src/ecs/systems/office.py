@@ -1,92 +1,61 @@
-import src.ecs.components as components
-import src.ecs.systems as systems
+import src.states.components as states_components
+import src.states.systems as states_systems
 
 # TODO: Remover tudo o que não seja apenas lógica desta função
 # RECOMENDAÇÕES:
 	# Criar uma função que recebe o valor devolvido desta para desenhar a surface correta
 	# Retornar algo como "{"lado": "esquerdo", "porta": "ativado", "luz": "desativado"}"
-def update_button_panel_surface(
-	left_map_id: list[int],
-	right_map_id: list[int]
-) -> None:
-
-	for map_id in (
-		left_map_id,
-		right_map_id	
-	):
-
-		if components.states.STATES[map_id[1]].state:
-			
-			if components.states.STATES[map_id[2]].state:
-				components.surfaces.CURRENT_INANIMATED_PROPS[map_id[0]] = components.setup_surfaces.ALL_INANIMATED_PROPS[map_id[0]]["all_on"]
-
-			else:
-				components.surfaces.CURRENT_INANIMATED_PROPS[map_id[0]] = components.setup_surfaces.ALL_INANIMATED_PROPS[map_id[0]]["door_on"]
-
-		elif components.states.STATES[map_id[2]].state:
-			components.surfaces.CURRENT_INANIMATED_PROPS[map_id[0]] = components.setup_surfaces.ALL_INANIMATED_PROPS[map_id[0]]["light_on"]
-
-		else:
-			components.surfaces.CURRENT_INANIMATED_PROPS[map_id[0]] = components.setup_surfaces.ALL_INANIMATED_PROPS[map_id[0]]["all_off"]
-
-
-def update_object_positions(
-	update_position: int,
-	mouse_x_position: int,
-	object_position_offset: dict[str, int],
-	position_offset_limits: dict[str, int]
-) -> None:
-	""" 
-		Aqui foi necessário mover os Rects dos botoes direitos pois eles estavam sendo 
-		renderizados fora da resolução da tela
-		resolução.x da tela 1280 vesus a coordenada.x dos rects 1515
-			isso ocorre porque a resolução.x da surface OFFICE é de 1600
-			logo não dava pra clickar pois sempre estava fora do alcance
-		a solução foi mover para a esquerda os Rects sempre que a tela estiver se mexendo
-		para a direita até que estejam no limite da resolução.
-		quando a tela vai para a esquerda os Rects são empurrados de volta para a direita,
-		fora da resolução
+def update_button_panel(
+	door_button_id: int,
+	light_button_id: int,
+) -> dict[str, str]:
 	"""
+		This function returns a dict with the current state of the buttons
+		of the button panel to use to update it
+	"""
+	state = {True: "on", False: "off"}
+	return {"door" : state[states_components.STATES[door_button_id].state ],
+			"light": state[states_components.STATES[light_button_id].state]}
 
-	if mouse_x_position > 1100\
-	and object_position_offset["base"] >= position_offset_limits["left"]:
-		object_position_offset["vertical"] = -(update_position)
 
-	elif mouse_x_position < 200\
-	and object_position_offset["base"] <= position_offset_limits["right"]:
-		object_position_offset["vertical"] = update_position
-
-	else:
-		object_position_offset["vertical"] = 0
-
-	object_position_offset["base"] += object_position_offset["vertical"]
-		
-
+# Checar em que lado do tela o click foi feito
+# para fazer uma checagem ao invés de duas, se possível
 def deny_multiple_lights_on(
-	left_map_id: list[int],
-	right_map_id: list[int],
+	left_light_id: int,
+	right_light_id: int,
 	current_time: int
 ) -> None:
 
-	for just_turned_on, was_already_on in ((left_map_id[2], right_map_id[2]),
-										   (right_map_id[2], left_map_id[2])):
+	for just_turned_on, was_already_on in ((left_light_id, right_light_id),
+										   (right_light_id, left_light_id)):
 		# Se o botão da luz de um lado acabou de ser ativado:
 		if all([
-			components.states.STATES[just_turned_on].state,
-			not components.states.STATES[just_turned_on].is_available
+			states_components.STATES[just_turned_on].state,
+			not states_components.STATES[just_turned_on].is_available
 		]):
 			# Se o botão da luz de outra já estava ativado:
 			if all([
-				components.states.STATES[was_already_on].state,
-				components.states.STATES[was_already_on].is_available
+				states_components.STATES[was_already_on].state,
+				states_components.STATES[was_already_on].is_available
 			]):
 				# Desativar o botão que já estava ativado
-				systems.states.update(
+				states_systems.update(
 					was_already_on,
 					current_time
 				)
+
+	# Talvez disparar um evento pra avisar que o button painel deveria mudar a sprite?
+
+
+def update_door(
+	door_id: int,
+	button_id: int,
+	current_time: int
+) -> None:
 	
-	update_button_panel_surface(
-		left_map_id,
-		right_map_id
-	)
+	if states_components.STATES[door_id].state ^ states_components.STATES[button_id].state:
+
+		states_systems.update(
+			door_id,
+			current_time
+		)

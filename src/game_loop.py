@@ -1,8 +1,8 @@
-import src.setup	  as setup
+import src.setup	  	  as setup
 import src.ecs.entities	  as entities
 import src.ecs.systems	  as systems
 import src.ecs.components as components
-import src.scenes	  as scenes
+import src.scenes	  	  as scenes
 
 
 def game_loop():

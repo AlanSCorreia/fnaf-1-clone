@@ -1,16 +1,27 @@
 import pygame
 
-import src.ecs.systems as systems
+import src.utils as utils
 
 from src.scenes.game_events import GameEvents
 
 
 class SceneMainMenu:
-    
+    _teste_surface: pygame.Surface = pygame.surface.Surface((200, 100))
+    _teste_rect = _teste_surface.fill(pygame.Color("red"))
+
+    def __init__(
+        self,
+        context
+    ) -> None:
+        
+        self.context = context
+
     def events(
         self
     ) -> None:
-        pass
+        
+        for event in pygame.event.get():
+            utils.exit_game(event)
 
     def updates(
         self
@@ -18,22 +29,25 @@ class SceneMainMenu:
         pass
 
     def draws(
-        self
+        self,
+        display_surface
     ) -> None:
-        pass
+        
+        display_surface.blit(
+            self._teste_surface,
+            self._teste_rect
+        )
 
     def state_transition(
         self,
-        context,
         event: pygame.Event
     ) -> None:
     
         from src.scenes.loading import SceneLoading
         
         if event == GameEvents.OPTION_PRESSED:
-            context.set_state(SceneLoading())
+            self.context.set_state(SceneLoading(self.context))
 
         elif event.type == pygame.KEYDOWN\
         and  event.key  == pygame.K_ESCAPE:
-            systems.utils.exit_game(event)
-            
+            utils.exit_game(event)
