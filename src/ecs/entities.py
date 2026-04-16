@@ -23,21 +23,28 @@ IDS_FILTERED	: dict[str, list[str]] = dict()
 MASKS_COMPONENTS: dict[int,  Bitmasks] = dict()
 
 
-def create_entity(entity_name: str) -> None:
+def create_entity(
+	entity_name: str
+) -> None:
+
 	global ID_NEXT, IDS
 
 	IDS[entity_name] = ID_NEXT
 	ID_NEXT += 1
 
 
-def has_component(masks_entity: int,
-				  mask_component: Bitmasks) -> bool:
+def has_component(
+	masks_entity: int,
+	mask_component: Bitmasks
+) -> bool:
 	
     return (masks_entity & mask_component) == mask_component
 
 
-def has_all_components(masks_entity: int,
-					   masks_components_strings: list[str] | None=None) -> bool:
+def has_all_components(
+	masks_entity: int,
+	masks_components_strings: list[str] | None=None
+) -> bool:
 
 	if masks_components_strings is None:
 		return False
@@ -46,8 +53,10 @@ def has_all_components(masks_entity: int,
 			   for mask_component in masks_components_strings)
 
 
-def has_any_components(masks_entity: int,
-					   masks_components_strings: list[str] | None=None) -> bool:
+def has_any_components(
+	masks_entity: int,
+	masks_components_strings: list[str] | None=None
+) -> bool:
 
 	if masks_components_strings is None:
 		return False
@@ -56,9 +65,11 @@ def has_any_components(masks_entity: int,
 			   for mask_component in masks_components_strings)
 
 
-def is_entity_valid_component_archtype(entity_name,
-									   bitmasks_accepted: list[str],
-									   bitmasks_rejected: list[str] | None) -> bool:
+def is_entity_valid_component_archtype(
+	entity_name,
+	bitmasks_accepted: list[str],
+	bitmasks_rejected: list[str] | None
+) -> bool:
 
 	return has_all_components(MASKS_COMPONENTS[IDS[entity_name]],
 								bitmasks_accepted)\
@@ -67,8 +78,10 @@ def is_entity_valid_component_archtype(entity_name,
 								bitmasks_rejected)
 
 
-def get_components_archtypes(bitmasks_accepted: list[str],
-							 bitmasks_rejected: list[str] | None) -> list[str]:
+def get_components_archtypes(
+	bitmasks_accepted: list[str],
+	bitmasks_rejected: list[str] | None
+) -> list[str]:
 	
 	return list(entity_name for entity_name in IDS.keys()
 				if is_entity_valid_component_archtype(entity_name,
@@ -76,8 +89,10 @@ def get_components_archtypes(bitmasks_accepted: list[str],
 													  bitmasks_rejected))
 
 
-def add_components_masks(entity_name: str,
-						 masks_components_string: str) -> None:
+def add_components_masks(
+	entity_name: str,
+	masks_components_string: str
+) -> None:
 
 	for index, mask_component in enumerate(masks_components_string.split(" | ")):
 
@@ -88,9 +103,11 @@ def add_components_masks(entity_name: str,
 		MASKS_COMPONENTS[IDS[entity_name]] = Bitmasks[mask_component]
 
 
-def add_filtered_id(entity_name: str,
-					components_accepted: list[str],
-					components_rejected: list[str] | list) -> None:
+def add_filtered_id(
+	entity_name: str,
+	components_accepted: list[str],
+	components_rejected: list[str] | list
+) -> None:
 
 	IDS_FILTERED[entity_name] = get_components_archtypes(components_accepted,
 												    	 components_rejected)
@@ -111,7 +128,6 @@ for entity_name, masks_components_string in import_functions.extract_yaml_data(r
 		entity_name,
 		masks_components_string
 	)
-
 
 for entity_name, masks_components_dict in import_functions.extract_yaml_data(roots[1]).items():
 	add_filtered_id(

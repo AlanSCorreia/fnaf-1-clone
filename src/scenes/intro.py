@@ -1,6 +1,6 @@
 import pygame
 
-import src.ecs.systems as systems
+import src.utils as utils
 from src.scenes.game_events import GameEvents
 from src.scenes.main_menu import SceneMainMenu
 
@@ -8,13 +8,24 @@ from src.scenes.main_menu import SceneMainMenu
 class SceneIntro:
     _teste_surface: pygame.Surface = pygame.surface.Surface((100, 100))
     _teste_rect = _teste_surface.fill(pygame.Color("green"))
-    
+
+    def __init__(
+        self,
+        context
+    ) -> None:
+
+        self.context = context
+        self.timer = utils.set_timer(3000)
+        
     def events(
         self
     ) -> None:
 
         for event in pygame.event.get():
-            systems.utils.exit_game(event)
+            utils.exit_game(event)
+
+            if event.type == self.timer:
+                self.state_transition(GameEvents.TIME_PASSED)
 
     def updates(
         self
@@ -34,9 +45,8 @@ class SceneIntro:
 
     def state_transition(
         self,
-        context,
         event
     ) -> None:
 
         if event == GameEvents.TIME_PASSED:
-            context.set_state(SceneMainMenu())
+            self.context.set_state(SceneMainMenu(self.context))

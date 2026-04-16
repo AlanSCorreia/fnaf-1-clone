@@ -2,6 +2,9 @@ import src.setup_surfaces 		 as setup_surfaces
 import src.animations.components as components
 import src.animations.surfaces 	 as surfaces
 
+import src.states.components as states_components
+import src.states.systems	 as states_systems
+
 
 class AnimationsQueue:
 	def __init__(
@@ -54,7 +57,7 @@ def is_animation_still_playing(
 ) -> bool:
 
 	return (frame_index > 0) if components.ANIMATIONS[animation_name].is_reversing\
-	  else (frame_index < len(setup_surfaces.ALL_ANIMATED_PROPS[animation_name]["normal"])-1)
+	  else (frame_index < len(setup_surfaces.ANIMATED_PROPS[animation_name]["normal"])-1)
 
 
 def check_frames_delay(
@@ -66,6 +69,7 @@ def check_frames_delay(
 		 > components.ANIMATIONS[animation_name].frames_delay
 
 
+#TODO: Arrumar
 def update_frame(
 	animation_name: str,
 	animation_state: str,
@@ -73,7 +77,7 @@ def update_frame(
 ) -> None:
 
 	components.ANIMATIONS[animation_name].last_frame_time: int = current_time
-	surfaces.CURRENT_ANIMATED_PROPS[animation_name][animation_state] = setup_surfaces.ALL_ANIMATED_PROPS[animation_name][animation_state][components.ANIMATIONS[animation_name].current_frame]
+	pass
 
 
 def restart_animation(
@@ -91,7 +95,7 @@ def increment_frame_index(
 ) -> None:
 	
 	if components.ANIMATIONS[animation_name].current_frame\
-	< len(setup_surfaces.ALL_ANIMATED_PROPS[animation_name])-1:
+	< len(setup_surfaces.ANIMATED_PROPS[animation_name])-1:
 		components.ANIMATIONS[animation_name].current_frame += 1
 
 	else:

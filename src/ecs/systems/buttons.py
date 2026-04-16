@@ -1,36 +1,78 @@
-from pygame import Rect
-
-import src.ecs.components.states as components_states
-import src.ecs.systems.states as system_states
-
-
-def mouse_hover(
-	mouse_position: tuple[int, int],
-	rectangle: Rect
-) -> bool:
-
-	return rectangle.collidepoint(mouse_position)
+import pygame
+import src.states.components as states_components
+import src.states.systems    as states_systems
 
 
-# Pode ser mais robusto checando quando o botão é apertado e quando ele é solto
-# Mas para o escopo desse projeto está bom assim
-def has_button_been_clicked(
+def update_button(
 	button_id: int,
-	mouse_position: tuple[int, int],
-	rectangle: Rect,
-	current_time: int
+    current_time: int
+) -> None:
+
+    states_systems.update(
+        button_id,
+        current_time
+    )
+
+
+def has_button_been_clicked(
+    button_id: int,
+    current_time: int
 ) -> bool:
 
-	has_been_clicked = False
+    has_been_clicked = False
 
-	if mouse_hover(mouse_position, rectangle)\
-	and components_states.STATES[button_id].is_available:
+    if states_components.STATES[button_id].is_available:
 
-		system_states.update(
-			button_id,
-		 	current_time
-		)
+        update_button(
+            button_id,
+            current_time
+        )
 
-		has_been_clicked = True
+        has_been_clicked = True
 
-	return has_been_clicked
+    return has_been_clicked
+
+
+class Button:
+    def __init__(
+        self,
+        id: int
+    ) -> None:
+
+        self.id: int = id
+
+    def update_button(
+        self,
+        current_time: int
+    ) -> None:
+
+        states_systems.update(
+            self.id,
+            current_time
+        )
+
+    def has_button_been_clicked(
+        self,
+        current_time: int
+    ) -> bool:
+
+        has_been_clicked = False
+
+        if states_components.STATES[self.id].is_available:
+
+            update_button(
+                self.id,
+                current_time
+            )
+
+            has_been_clicked = True
+
+        return has_been_clicked
+    
+    def update(
+        self,
+        event: pygame.Event
+    ) -> None:
+
+        pass
+    

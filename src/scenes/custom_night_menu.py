@@ -5,6 +5,12 @@ from src.scenes.game_events import GameEvents
 
 
 class SceneCustomNightMenu:
+    def __init__(
+        self,
+        context
+    ) -> None:
+    
+        self.context = context
     
     def events(self) -> None:
         pass
@@ -12,20 +18,22 @@ class SceneCustomNightMenu:
     def updates(self) -> None:
         pass
 
-    def draws(self) -> None:
+    def draws(
+        self,
+        display_surface: pygame.Surface
+    ) -> None:
         pass
 
     def state_transition(
         self,
-        context,
         event
     ) -> None:
 
         from src.scenes.loading import SceneLoading
         
         if event == GameEvents.OPTION_PRESSED:
-            context.set_state(SceneLoading())
+            self.context.set_state(SceneLoading(self.context))
 
         elif event.type == pygame.KEYDOWN\
         and  event.key  == pygame.K_ESCAPE:
-            context.set_state(SceneMainMenu())
+            self.context.set_state(SceneMainMenu(self.context))

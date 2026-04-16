@@ -15,29 +15,22 @@ class AnimatronicData:
 	routes: dict[int | str, str | list[str]]
 
 
-def convert_difficult_levels_keys(difficult_levels):
-
-	new_difficult_level_dict = dict()
-
-	for key, value in difficult_levels.items():
-		new_difficult_level_dict[nights.Nights[key.upper()]] = value
+def convert_difficult_levels_keys(
+	difficult_levels
+) -> dict:
 	
-	return new_difficult_level_dict
+	return {
+		nights.Nights[key.upper()]: value
+		for key, value in difficult_levels.items()
+	}
 
 
-def generate_animatronic_object(animatronic_information) -> AnimatronicData:
+def generate_animatronic_object(
+	animatronic_information: dict
+) -> AnimatronicData:
 
 	animatronic_information["difficult_levels"] = convert_difficult_levels_keys(animatronic_information["difficult_levels"])
-
-	new_animatronic = AnimatronicData(
-		animatronic_information["current_room_index"],
-		animatronic_information["current_room_name"],
-		animatronic_information["movement_opportunity_delay"],
-		animatronic_information["difficult_levels"],
-		animatronic_information["routes"]
-	)
-
-	return new_animatronic
+	return AnimatronicData(**animatronic_information)
 
 
 ANIMATRONICS: dict[int, AnimatronicData] = dict()
