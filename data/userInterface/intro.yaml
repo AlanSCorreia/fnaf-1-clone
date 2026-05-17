@@ -1,0 +1,10 @@
+epilepsy_warning:
+  type: text
+  font: LcdSolid
+  message: "WARNING!\nThis game contains flashing lights, loud noises, and lots of jumpscares!"
+  color: white
+  position:
+    x: 100
+    y: 100
+  groups:
+    - intro

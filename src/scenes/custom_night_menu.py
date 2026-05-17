@@ -1,7 +1,7 @@
 import pygame
 
 from src.scenes.main_menu import SceneMainMenu
-from src.scenes.game_events import GameEvents
+from src.events.game_events import GameEvents
 
 
 class SceneCustomNightMenu:
@@ -31,7 +31,7 @@ class SceneCustomNightMenu:
 
         from src.scenes.loading import SceneLoading
         
-        if event == GameEvents.OPTION_PRESSED:
+        if event == GameEvents.OPTION_SELECTED:
             self.context.set_state(SceneLoading(self.context))
 
         elif event.type == pygame.KEYDOWN\

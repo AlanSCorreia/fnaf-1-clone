@@ -2,7 +2,7 @@ import pygame
 
 import src.utils as utils
 
-from src.scenes.game_events import GameEvents
+from src.events.game_events import GameEvents
 
 
 class SceneMainMenu:
@@ -45,7 +45,7 @@ class SceneMainMenu:
     
         from src.scenes.loading import SceneLoading
         
-        if event == GameEvents.OPTION_PRESSED:
+        if event == GameEvents.OPTION_SELECTED:
             self.context.set_state(SceneLoading(self.context))
 
         elif event.type == pygame.KEYDOWN\

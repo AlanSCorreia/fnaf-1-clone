@@ -1,5 +1,5 @@
 from src.scenes.gameplay import SceneGameplay
-from src.scenes.game_events import GameEvents
+from src.events.game_events import GameEvents
 
 
 class SceneLoading:

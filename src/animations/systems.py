@@ -32,8 +32,7 @@ class AnimationsQueue:
 		if not components.ANIMATIONS[self.queue[-1]].is_animation_playing:
 			self.queue.pop()
 
-			if len(self.queue)\
-			> 0:
+			if len(self.queue):
 				components.ANIMATIONS[self.queue[-1]].is_animation_playing = True
 
 
@@ -45,22 +44,23 @@ def update(
 		return
 	
 	frame_index = components.ANIMATIONS[animatino_name].current_frame
-	components.ANIMATIONS[animatino_name].is_animation_playing = is_animation_still_playing(
+	components.ANIMATIONS[animatino_name].is_animation_playing = is_animation_playing(
 		animatino_name,
 		frame_index
 	)
 
 
-def is_animation_still_playing(
+def is_animation_playing(
 	animation_name: str,
 	frame_index: int
 ) -> bool:
 
-	return (frame_index > 0) if components.ANIMATIONS[animation_name].is_reversing\
-	  else (frame_index < len(setup_surfaces.ANIMATED_PROPS[animation_name]["normal"])-1)
+	return frame_index > 0\
+		if components.ANIMATIONS[animation_name].is_reversing\
+		else frame_index < len(setup_surfaces.ANIMATED_PROPS[animation_name]["normal"])-1
 
 
-def check_frames_delay(
+def get_frames_delay(
 	animation_name: str,
 	current_time: int
 ) -> bool:
@@ -96,9 +96,11 @@ def increment_frame_index(
 	
 	if components.ANIMATIONS[animation_name].current_frame\
 	< len(setup_surfaces.ANIMATED_PROPS[animation_name])-1:
+
 		components.ANIMATIONS[animation_name].current_frame += 1
 
 	else:
+		
 		restart_animation(
 			animation_name
 		)
@@ -108,8 +110,7 @@ def decrement_frame_index(
 	animation_name: str
 ) -> None:
 	
-	if components.ANIMATIONS[animation_name].current_frame\
-	> 1:
+	if components.ANIMATIONS[animation_name].current_frame > 1:
 		components.ANIMATIONS[animation_name].current_frame -= 1
 		
 	else:

@@ -1,4 +1,4 @@
-from src.scenes.game_events import GameEvents
+from src.events.game_events import GameEvents
 
 
 class SceneNightWon:

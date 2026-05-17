@@ -1,3 +1,5 @@
+import pygame
+
 from src.scenes.intro import SceneIntro
 
 
@@ -8,7 +10,7 @@ class SceneContext:
     ) -> None:
 
         self._state = SceneIntro(self)
-        self._display_surface = display_surface
+        self._display_surface: pygame.Surface = display_surface
     
     def set_state(
         self,
@@ -24,3 +26,5 @@ class SceneContext:
         self._state.events()
         self._state.updates()
         self._state.draws(self._display_surface)
+
+        pygame.display.update()

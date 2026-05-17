@@ -1,6 +1,5 @@
 import src.ecs.entities as entities
 import src.states.components as components
-import src.states.systems as systems
 
 
 def update(

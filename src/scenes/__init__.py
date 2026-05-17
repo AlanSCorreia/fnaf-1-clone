@@ -1,4 +1,3 @@
-from . import game_events
 from . import custom_night_menu
 from . import game_over
 from . import gameplay
@@ -13,7 +12,6 @@ from . import week_won
 
 
 __all__ = [
-    "game_events",
     "custom_night_menu",
     "game_over",
     "gameplay",

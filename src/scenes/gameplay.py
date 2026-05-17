@@ -3,9 +3,9 @@ import pygame
 from src.scenes.game_over import SceneGameOver
 from src.scenes.night_won import SceneNightWon
 from src.scenes.main_menu import SceneMainMenu
-from src.scenes.game_events import GameEvents
+from src.events.game_events import GameEvents
 
-from src.userInterface.implementation import GROUPS
+from src.userInterface.setup import UI_GROUPS
 
 
 class SceneGameplay:
@@ -31,7 +31,7 @@ class SceneGameplay:
         display_surface
     ) -> None:
         
-        GROUPS["off_camera"].draw(display_surface)
+        UI_GROUPS["off_camera"].draw(display_surface)
 
     def state_transition(
         self,

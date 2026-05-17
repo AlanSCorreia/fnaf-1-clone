@@ -1,7 +1,3 @@
-import src.states.components as states_components
-import src.states.systems 	 as states_systems
-
-
 def update_object_positions(
 	update_position: int,
 	mouse_x_position: int,
@@ -36,17 +32,19 @@ def update_object_positions(
 
 def set_camera_direction(
 	camera_movement_id: int,
+	states_components: dict,
+	states_update,
 	current_time: int,
-	position_offset_background,
-	position_offset_background_limits
+	position_offset_background: dict[str, int],
+	position_offset_background_limits: dict[str, int]
 ) -> None:
 
-	direction: str = "left" if states_components.STATES[camera_movement_id].state\
+	direction: str = "left" if states_components[camera_movement_id].state\
 				else "right"
 
 	if position_offset_background["base"] in range(position_offset_background_limits[direction]-3,
-													position_offset_background_limits[direction]+3):
-		states_systems.update(
+												   position_offset_background_limits[direction]+3):
+		states_update(
 			camera_movement_id,
 			current_time,
 			direction.startswith("right")

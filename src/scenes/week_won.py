@@ -1,5 +1,5 @@
 from src.scenes.main_menu import SceneMainMenu
-from src.scenes.game_events import GameEvents
+from src.events.game_events import GameEvents
 
 
 class SceneWeekWon:

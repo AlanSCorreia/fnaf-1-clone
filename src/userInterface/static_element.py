@@ -1,28 +1,9 @@
 import pygame
 
-from src.event_emitter import EventEmitter
+from src.events.event_emitter import GUIEventEmitter
 
 
-class UITextElement(pygame.sprite.Sprite):
-	def __init__(
-		self,
-		text: str,
-		text_font: pygame.Font,
-		text_color: str,
-		position: tuple[int, int],
-		groups: list[pygame.sprite.Group]
-	) -> None:
-
-		super().__init__(groups)
-		self.image: pygame.Surface = text_font.render(text, True, color=text_color)
-		self.rect: pygame.Rect = self.image.get_rect(topleft=position)
-		self.event_emitter: EventEmitter = EventEmitter()
-	
-	def update(self) -> None:
-		pass
-
-
-class UIStaticElement(pygame.sprite.Sprite):
+class StaticElement(pygame.sprite.Sprite):
 	def __init__(
 		self,
 		image_path: str,
@@ -33,12 +14,13 @@ class UIStaticElement(pygame.sprite.Sprite):
 		super().__init__(groups)
 		self.image: pygame.Surface = pygame.image.load(image_path).convert_alpha()
 		self.rect = self.image.get_rect(topleft=position)
-		self.event_emitter = EventEmitter()
+		self.event_emitter = GUIEventEmitter()
 		
 	def update(self) -> None:
 		pass
 
 
+# TODO: Precisa refatorar sá porra
 POWER_USAGE = {
 	"bars": 2,
 	"left_percentage": 100
